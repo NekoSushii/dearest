@@ -48,19 +48,41 @@
     width: calc(100% / 7);
     font-weight: bold;
   }
+
+  .row{
+    display: flex;
+  }
   
   /* Calendar cells */
   .body {
-    display: flex;
-    flex-wrap: wrap;
+    /* display: flex;
+    flex-wrap: wrap; */
     padding: 10px;
   }
   
   .cell {
+    text-align: justify;
     width: calc(100% / 7);
-    padding: 10px;
+    padding: 20px;
+    margin: 5px;
     cursor: pointer;
+  }
+
+  .cell-food{
+    background-color: aqua;
+  }
+
+  .cell-outing{
+    background-color: bisque;
+  }
+
+  .cell-busy{
+    background-color: red;
+  }
+
+  .cell:hover{
     transition: background-color 0.2s;
+    background-color: grey;
   }
   
   /* Disabled cells (belonging to previous or next month) */
