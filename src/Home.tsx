@@ -26,8 +26,8 @@ function Home() {
         const commentList = []
 
         for(let i=0; i<tempEvents.length; i++){
-          startDateList.push(tempEvents[i].data.startDateTime.toDate())
-          endDateList.push(tempEvents[i].data.endDateTime.toDate())
+          startDateList.push(FirebaseDateDecoder(tempEvents[i].data.startDateTime))
+          endDateList.push(FirebaseDateDecoder(tempEvents[i].data.endDateTime))
           eventList.push(tempEvents[i].data.event)
           locationList.push(tempEvents[i].data.location)
           commentList.push(tempEvents[i].data.comments)
@@ -41,6 +41,20 @@ function Home() {
 
     fetchData()
   },[])
+
+  const FirebaseDateDecoder = (aDateString: string) =>{
+    const [datePart, timePart] = aDateString.split(' ')
+    const [day, month, year] = datePart.split('-')
+    const [hours, minutes, seconds] = timePart.split(':')
+    const date = new Date(Number(year), Number(month) - 1, Number(day), Number(hours), Number(minutes), Number(seconds))
+
+    return date
+  }
+
+  // const FirebaseDateEncoder = (aDate: Date) =>{
+
+  //   return
+  // }
 
   const handleSelectDate = (date: Date) => {
     setOpen(true)

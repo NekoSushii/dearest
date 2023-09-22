@@ -30,8 +30,8 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
         const commentList = []
 
         for(let i=0; i<tempEvents.length; i++){
-          startDateList.push(tempEvents[i].data.startDateTime.toDate())
-          endDateList.push(tempEvents[i].data.endDateTime.toDate())
+          startDateList.push(FirebaseDateDecoder(tempEvents[i].data.startDateTime))
+          endDateList.push(FirebaseDateDecoder(tempEvents[i].data.endDateTime))
           eventList.push(tempEvents[i].data.event)
           locationList.push(tempEvents[i].data.location)
           commentList.push(tempEvents[i].data.comments)
@@ -47,31 +47,60 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
   },[currentDate, setCurrentDate])
 
 
+  const FirebaseDateDecoder = (aDateString: string) =>{
+    const [datePart, timePart] = aDateString.split(' ')
+    const [day, month, year] = datePart.split('-')
+    const [hours, minutes, seconds] = timePart.split(':')
+    const date = new Date(Number(year), Number(month) - 1, Number(day), Number(hours), Number(minutes), Number(seconds))
+
+    return date
+  }
+
+
+  //create the events within each date cell
   const renderCurrentDayEvents = (date: Date) => {
     const startDateList = eventsData[0]
     const endDateList = eventsData[1]
     const eventList = eventsData[2]
     const locationList = eventsData[3]
     const commentsList = eventsData[4]
+    const dateFormatted: Date = new Date(formatDateWithoutTime(date))
+    const listOfMatchedEvents = []
 
     for(let i=0; i<startDateList.length; i++){
+      const startDateFormatted: Date = new Date(formatDateWithoutTime(startDateList[i]))
+      const endDateFormatted: Date = new Date(formatDateWithoutTime(endDateList[i]))
+      
 
-      if(formatDateWithoutTime(date) >= formatDateWithoutTime(startDateList[i]) 
-        && formatDateWithoutTime(date) <= formatDateWithoutTime(endDateList[i])){
-
+      if(dateFormatted >= startDateFormatted && dateFormatted <= endDateFormatted){
         if(eventList[i] === 'food'){
-          return( <div style={{ background: "aqua" }}>{commentsList[i]}</div> )
+          listOfMatchedEvents.push(<div style={{ background: "aqua" }}>{commentsList[i]}</div>)
+          // listOfMatchedEvents.push(commentsList[i])
+          // return( <div style={{ background: "aqua" }}>{commentsList[i]}</div> )
         }
 
-        else if(eventList[i] === 'travel'){
-          return( <div style={{ background: "aquamarine" }} >{locationList[i]}</div>)
+        if(eventList[i] === 'travel'){
+          listOfMatchedEvents.push(<div style={{ background: "aquamarine" }} >{locationList[i]}</div>)
+          // listOfMatchedEvents.push(commentsList[i])
+          // return( <div style={{ background: "aquamarine" }} >{locationList[i]}</div>)
         }
 
-        else if(eventList[i] === 'others'){
-          return( <div style={{ background: 'lemonchiffon '}}>{commentsList[i]}</div>)
+        if(eventList[i] === 'others'){
+          listOfMatchedEvents.push(<div style={{ background: 'lemonchiffon '}}>{commentsList[i]}</div>)
+          // listOfMatchedEvents.push(commentsList[i])
+          // return( <div style={{ background: 'lemonchiffon '}}>{commentsList[i]}</div>)
         }
-
       }
+
+      if(listOfMatchedEvents.length > 0){
+        console.log(listOfMatchedEvents.length)
+        return(
+          <div>
+              {listOfMatchedEvents}
+          </div>
+        ) 
+      }
+
     }
   }
 
@@ -81,7 +110,7 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based
     const day = String(date.getDate()).padStart(2, '0');
   
-    return `${day}-${month}-${year}`;
+    return `${year}-${month}-${day}`;
   }
   
 

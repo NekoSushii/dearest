@@ -2,7 +2,8 @@
 .calendar-container {
     font-family: Arial, sans-serif;
     text-align: center;
-    max-width: 1000px;
+    min-width: 800px;
+    min-height: 500px;
     margin: 0 auto;
     background-color: #fff;
     border: 1px solid #ccc;
@@ -63,7 +64,8 @@
   .cell {
     text-align: justify;
     width: calc(100% / 7);
-    padding: 20px;
+    min-height: 75px;
+    padding: 5px;
     margin: 5px;
     cursor: pointer;
   }
