@@ -74,21 +74,15 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
 
       if(dateFormatted >= startDateFormatted && dateFormatted <= endDateFormatted){
         if(eventList[i] === 'food'){
-          listOfMatchedEvents.push(<div style={{ background: "aqua" }}>{commentsList[i]}</div>)
-          // listOfMatchedEvents.push(commentsList[i])
-          // return( <div style={{ background: "aqua" }}>{commentsList[i]}</div> )
+          listOfMatchedEvents.push(<div style={{ background: "aqua", margin: '3px' }}>{commentsList[i]}</div>)
         }
 
         if(eventList[i] === 'travel'){
-          listOfMatchedEvents.push(<div style={{ background: "aquamarine" }} >{locationList[i]}</div>)
-          // listOfMatchedEvents.push(commentsList[i])
-          // return( <div style={{ background: "aquamarine" }} >{locationList[i]}</div>)
+          listOfMatchedEvents.push(<div style={{ background: "aquamarine", margin: '3px' }} >{locationList[i]}</div>)
         }
 
         if(eventList[i] === 'others'){
-          listOfMatchedEvents.push(<div style={{ background: 'lemonchiffon '}}>{commentsList[i]}</div>)
-          // listOfMatchedEvents.push(commentsList[i])
-          // return( <div style={{ background: 'lemonchiffon '}}>{commentsList[i]}</div>)
+          listOfMatchedEvents.push(<div style={{ background: 'lemonchiffon ', margin: '3px'}}>{commentsList[i]}</div>)
         }
       }
     }
@@ -101,7 +95,7 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
         </div>
       ) 
     }
-    
+
   }
 
 
