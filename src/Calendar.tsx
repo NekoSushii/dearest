@@ -58,6 +58,8 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
 
 
   //create the events within each date cell
+  //todo create an algorithm to check the order of the events check across chatgpt with 
+  // give variables id for style coloring
   const renderCurrentDayEvents = (date: Date) => {
     const startDateList = eventsData[0]
     const endDateList = eventsData[1]
