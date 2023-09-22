@@ -91,17 +91,17 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
           // return( <div style={{ background: 'lemonchiffon '}}>{commentsList[i]}</div>)
         }
       }
-
-      if(listOfMatchedEvents.length > 0){
-        console.log(listOfMatchedEvents.length)
-        return(
-          <div>
-              {listOfMatchedEvents}
-          </div>
-        ) 
-      }
-
     }
+    
+    if(listOfMatchedEvents.length > 0){
+      console.log(listOfMatchedEvents.length)
+      return(
+        <div>
+            {listOfMatchedEvents}
+        </div>
+      ) 
+    }
+    
   }
 
 
