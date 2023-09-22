@@ -1,41 +1,89 @@
 import React, { useEffect, useState } from 'react';
 import './Calendar.css';
-import {db} from './firebase'
+import 'firebase/firestore'
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth } from 'date-fns';
-import {collection, addDoc, getDocs, getDoc, updateDoc,deleteDoc ,Timestamp} from 'firebase/firestore'
+import restAPI from './controller';
+import { Timestamp, collection, getDocs } from 'firebase/firestore';
+import { db } from './firebase';
+import { colors } from '@mui/material';
 
 interface CalendarProps {
   currentDate: Date;
   onSelectDate: (date: Date) => void;
 }
 
-
 const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
   const [currentDateState, setCurrentDate] = useState(currentDate);
+  const [eventsData, setEventsData] = useState<any[]>([])
+  const [currentMonthState, setCurrentMonthState] = useState(currentDate.getMonth())
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    async function fetchEventsFromDB() {
+    async function fetchData(){
       await getDocs(collection(db, 'events')).then((response: any) => {
+
         let tempEvents = response.docs.map((val: { data: () => any; },key: any)=>({data: val.data()}))
-        let events = tempEvents[0].data
+        const startDateList = []
+        const endDateList = []
+        const eventList = []
+        const locationList = []
+        const commentList = []
 
-        const options: Intl.DateTimeFormatOptions = {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-        };
-        const formattedDate = currentDateState.toLocaleString('en-GB', options);
-        const eventStr : string = events
-        var localDateEvent : string = ''
-        if(eventStr.includes(formattedDate)){
-          localDateEvent = eventStr.substring(eventStr.indexOf(formattedDate))
+        for(let i=0; i<tempEvents.length; i++){
+          startDateList.push(tempEvents[i].data.startDateTime.toDate())
+          endDateList.push(tempEvents[i].data.endDateTime.toDate())
+          eventList.push(tempEvents[i].data.event)
+          locationList.push(tempEvents[i].data.location)
+          commentList.push(tempEvents[i].data.comments)
         }
-        console.log(localDateEvent)
-      })
-    }
-    fetchEventsFromDB()
-  })
 
+        const combinedList = []
+        combinedList.push(startDateList, endDateList, eventList, locationList, commentList)
+        setEventsData(combinedList)
+        setIsLoading(false)
+    });}
+
+    fetchData()
+  },[currentDate, setCurrentDate])
+
+
+  const renderCurrentDayEvents = (date: Date) => {
+    const startDateList = eventsData[0]
+    const endDateList = eventsData[1]
+    const eventList = eventsData[2]
+    const locationList = eventsData[3]
+    const commentsList = eventsData[4]
+
+    for(let i=0; i<startDateList.length; i++){
+
+      if(formatDateWithoutTime(date) >= formatDateWithoutTime(startDateList[i]) 
+        && formatDateWithoutTime(date) <= formatDateWithoutTime(endDateList[i])){
+
+        if(eventList[i] === 'food'){
+          return( <div style={{ background: "aqua" }}>{commentsList[i]}</div> )
+        }
+
+        else if(eventList[i] === 'travel'){
+          return( <div style={{ background: "aquamarine" }} >{locationList[i]}</div>)
+        }
+
+        else if(eventList[i] === 'others'){
+          return( <div style={{ background: 'lemonchiffon '}}>{commentsList[i]}</div>)
+        }
+
+      }
+    }
+  }
+
+
+  function formatDateWithoutTime(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+  
+    return `${day}-${month}-${year}`;
+  }
+  
 
   const renderHeader = () => {
     return (
@@ -71,16 +119,6 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
     const startDate = startOfWeek(monthStart);
     const endDate = endOfWeek(monthEnd);
 
-    function getClassForCell(cellValue: String) {
-      if (cellValue === 'A') {
-        return 'green-cell';
-      } else if (cellValue === 'B') {
-        return 'red-cell';
-      } else {
-        return 'blue-cell';
-      }
-    }
-
     const dateFormat = 'd';
     const rows = [];
     let days = [];
@@ -99,6 +137,7 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
           >
             {formattedDate}
             {GetCellType(formattedDate)}
+            {isLoading ? (<p>Loading...</p>) : (renderCurrentDayEvents(day))}
           </div>
         );
         day = addDays(day, 1);
@@ -117,13 +156,8 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
 
   const GetCellType = (formattedDate: String) =>{
 
-    const foodDateTest: Date = new Date(2023, 8, 11)
-    const busyDateTest: Date = new Date(2023, 8, 24)
-    const outingDateTest: Date = new Date(2023, 8, 3)
-
     return(
       <div className=''>
-        {formattedDate}
       </div>
     )
   }
@@ -131,11 +165,13 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
 
   const prevMonth = () => {
     setCurrentDate((prevDate) => addDays(startOfMonth(prevDate), -1));
+    setCurrentMonthState(currentMonthState - 1)
   };
 
 
   const nextMonth = () => {
     setCurrentDate((prevDate) => addDays(endOfMonth(prevDate), 1));
+    setCurrentMonthState(currentMonthState + 1)
   };
 
 
