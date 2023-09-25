@@ -6,6 +6,7 @@ import restAPI from './controller';
 import { Timestamp, collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
 import { colors } from '@mui/material';
+import internal from 'stream';
 
 interface CalendarProps {
   currentDate: Date;
@@ -68,6 +69,7 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
     const commentsList = eventsData[4]
     const dateFormatted: Date = new Date(formatDateWithoutTime(date))
     const listOfMatchedEvents = []
+    const listOfMatchedEventIndex: (number)[] = []
 
     for(let i=0; i<startDateList.length; i++){
       const startDateFormatted: Date = new Date(formatDateWithoutTime(startDateList[i]))
@@ -75,22 +77,61 @@ const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
       
 
       if(dateFormatted >= startDateFormatted && dateFormatted <= endDateFormatted){
-        if(eventList[i] === 'food'){
-          listOfMatchedEvents.push(<div style={{ background: "aqua", margin: '3px' }}>{commentsList[i]}</div>)
-        }
+        listOfMatchedEventIndex.push(i)
+      }
+    }
 
-        if(eventList[i] === 'travel'){
-          listOfMatchedEvents.push(<div style={{ background: "aquamarine", margin: '3px' }} >{locationList[i]}</div>)
-        }
+    if(listOfMatchedEventIndex.length > 1){
+      for(let i=0; i<listOfMatchedEventIndex.length; i++){
 
-        if(eventList[i] === 'others'){
-          listOfMatchedEvents.push(<div style={{ background: 'lemonchiffon ', margin: '3px'}}>{commentsList[i]}</div>)
+        const DateSorter = (index: number ) =>{
+          for(let j=index+1; j<listOfMatchedEventIndex.length-(i); j++){
+
+            if(listOfMatchedEventIndex[0] === undefined){
+              listOfMatchedEventIndex.shift()
+            }
+            const pointerFormattedDate = new Date(formatDateWithoutTime(startDateList[listOfMatchedEventIndex[index]]))
+            const interateFormattedDate = new Date(formatDateWithoutTime(startDateList[listOfMatchedEventIndex[j]]))
+
+            if(pointerFormattedDate > interateFormattedDate){
+              let temp = listOfMatchedEventIndex[j+1]
+              listOfMatchedEventIndex[j+1] = listOfMatchedEventIndex[index]
+              listOfMatchedEventIndex[index] = temp
+              return true
+            }
+            else{
+              return false
+            }
+          }
+        }
+  
+        while(DateSorter(i) === true){
+          DateSorter(i)
+        }
+        console.log(listOfMatchedEventIndex)
+        for(let i=0; i<listOfMatchedEventIndex.length; i++){
+          console.log(commentsList[i])
         }
       }
     }
     
+
+    for(let i=0; i<listOfMatchedEventIndex.length; i++){
+      let currentIndex = listOfMatchedEventIndex[i]
+      if(eventList[currentIndex] === 'food'){
+        listOfMatchedEvents.push(<div style={{ background: "aqua", margin: '3px' }}>{commentsList[currentIndex]}</div>)
+      }
+  
+      if(eventList[currentIndex] === 'travel'){
+        listOfMatchedEvents.push(<div style={{ background: "aquamarine", margin: '3px' }} >{locationList[currentIndex]}</div>)
+      }
+  
+      if(eventList[currentIndex] === 'others'){
+        listOfMatchedEvents.push(<div style={{ background: 'lemonchiffon ', margin: '3px'}}>{commentsList[currentIndex]}</div>)
+      }
+    }
+    
     if(listOfMatchedEvents.length > 0){
-      console.log(listOfMatchedEvents.length)
       return(
         <div>
             {listOfMatchedEvents}
