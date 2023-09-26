@@ -2,6 +2,10 @@ import React from 'react'
 
 import '../style/Home.css'
 
+import imageOne from '../resources/image/WeiLing_Birthday_150923.jpg'
+import imageTwo from '../resources/image/20230916_flossbuns.jpg'
+import imageThree from '../resources/image/20230922_dinner.jpg'
+
 function Home(){
 
   function reveal() {
@@ -34,7 +38,7 @@ return(
         </div>
         <div className='imgcontainer-picture'>
           <div className='animate__zoomInRight'>
-            <img src='flower.jpg' className='mainpageimg-right' alt=''/>
+            <img src={imageThree} className='mainpageimg-right' alt=''/>
           </div>
         </div>
       </div>
@@ -47,7 +51,7 @@ return(
             <p>Dearest made food for me, taste good!</p>
           </div>
           <div className='imgcontainer-picture'>
-            <img src='./flower.jpg' className='mainpageimg-left' alt=''/>
+            <img src={imageTwo} className='mainpageimg-left' alt=''/>
           </div>
         </div>
       </div>
@@ -60,7 +64,7 @@ return(
             <p>Happy Birthday Dear!</p>
           </div>
           <div className='imgcontainer-picture'>
-            <img src='./flower.jpg' className='mainpageimg-right' alt=''/>
+            <img src={imageOne} className='mainpageimg-right' alt=''/>
           </div>
         </div>
       </div>
