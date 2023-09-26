@@ -34,7 +34,7 @@ return(
         </div>
         <div className='imgcontainer-picture'>
           <div className='animate__zoomInRight'>
-            <img src='flower.jpg' className='mainpageimg-right1' alt=''/>
+            <img src='flower.jpg' className='mainpageimg-right' alt=''/>
           </div>
         </div>
       </div>
@@ -47,7 +47,7 @@ return(
             <p>Dearest made food for me, taste good!</p>
           </div>
           <div className='imgcontainer-picture'>
-            <img src='./flower.jpg' className='mainpageimg-left1' alt=''/>
+            <img src='./flower.jpg' className='mainpageimg-left' alt=''/>
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@ return(
             <p>Happy Birthday Dear!</p>
           </div>
           <div className='imgcontainer-picture'>
-            <img src='./flower.jpg' className='mainpageimg-left1' alt=''/>
+            <img src='./flower.jpg' className='mainpageimg-right' alt=''/>
           </div>
         </div>
       </div>
