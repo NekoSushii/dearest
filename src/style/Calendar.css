@@ -1,8 +1,9 @@
 /* Calendar container */
 .calendar-container {
     font-family: Arial, sans-serif;
+    font-size: small;
     text-align: center;
-    min-width: 800px;
+    width: 99%;
     min-height: 500px;
     margin: 0 auto;
     background-color: #fff;
@@ -101,4 +102,20 @@
   
   .dialog-title{
     text-align: center;
+}
+
+
+@media (max-width: 768px){
+  .calendar-container {
+    font-family: Arial, sans-serif;
+    font-size: x-small;
+    text-align: center;
+    width: 99%;
+    min-height: 500px;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  }
 }
