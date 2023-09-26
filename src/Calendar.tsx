@@ -1,258 +1,55 @@
-import React, { useEffect, useState } from 'react';
 import './Calendar.css';
-import 'firebase/firestore'
-import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth } from 'date-fns';
-import restAPI from './controller';
-import { Timestamp, collection, getDocs } from 'firebase/firestore';
+import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { db } from './firebase';
-import { colors } from '@mui/material';
-import internal from 'stream';
 
-interface CalendarProps {
-  currentDate: Date;
-  onSelectDate: (date: Date) => void;
-}
+import CalendarCells from './CalendarCells';
+import { collection, getDocs } from 'firebase/firestore';
 
-const Calendar: React.FC<CalendarProps> = ({ currentDate, onSelectDate }) => {
-  const [currentDateState, setCurrentDate] = useState(currentDate);
-  const [eventsData, setEventsData] = useState<any[]>([])
-  const [currentMonthState, setCurrentMonthState] = useState(currentDate.getMonth())
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchData(){
-      await getDocs(collection(db, 'events')).then((response: any) => {
-
-        let tempEvents = response.docs.map((val: { data: () => any; },key: any)=>({data: val.data()}))
-        const startDateList = []
-        const endDateList = []
-        const eventList = []
-        const locationList = []
-        const commentList = []
-
-        for(let i=0; i<tempEvents.length; i++){
-          startDateList.push(FirebaseDateDecoder(tempEvents[i].data.startDateTime))
-          endDateList.push(FirebaseDateDecoder(tempEvents[i].data.endDateTime))
-          eventList.push(tempEvents[i].data.event)
-          locationList.push(tempEvents[i].data.location)
-          commentList.push(tempEvents[i].data.comments)
-        }
-
-        const combinedList = []
-        combinedList.push(startDateList, endDateList, eventList, locationList, commentList)
-        setEventsData(combinedList)
-        setIsLoading(false)
-    });}
-
-    fetchData()
-  },[currentDate, setCurrentDate])
+function Calendar() {
+  const [open, setOpen] = useState(false)
 
 
-  const FirebaseDateDecoder = (aDateString: string) =>{
-    const [datePart, timePart] = aDateString.split(' ')
-    const [day, month, year] = datePart.split('-')
-    const [hours, minutes, seconds] = timePart.split(':')
-    const date = new Date(Number(year), Number(month) - 1, Number(day), Number(hours), Number(minutes), Number(seconds))
-
-    return date
-  }
+  //function that opens the modal when user selects the date
+  const handleSelectDate = (date: Date) => {
+    setOpen(true)
+  };
 
 
-  //create the events within each date cell
-  //todo create an algorithm to check the order of the events check across chatgpt with 
-  // give variables id for style coloring
-  const renderCurrentDayEvents = (date: Date) => {
-    const startDateList = eventsData[0]
-    const endDateList = eventsData[1]
-    const eventList = eventsData[2]
-    const locationList = eventsData[3]
-    const commentsList = eventsData[4]
-    const dateFormatted: Date = new Date(formatDateWithoutTime(date))
-    const listOfMatchedEvents = []
-    const listOfMatchedEventIndex: (number)[] = []
-
-    for(let i=0; i<startDateList.length; i++){
-      const startDateFormatted: Date = new Date(formatDateWithoutTime(startDateList[i]))
-      const endDateFormatted: Date = new Date(formatDateWithoutTime(endDateList[i]))
-      
-
-      if(dateFormatted >= startDateFormatted && dateFormatted <= endDateFormatted){
-        listOfMatchedEventIndex.push(i)
-      }
-    }
-
-    if(listOfMatchedEventIndex.length > 1){
-      for(let i=0; i<listOfMatchedEventIndex.length; i++){
-
-        const DateSorter = (index: number ) =>{
-          for(let j=index+1; j<listOfMatchedEventIndex.length-(i); j++){
-
-            if(listOfMatchedEventIndex[0] === undefined){
-              listOfMatchedEventIndex.shift()
-            }
-            const pointerFormattedDate = new Date(formatDateWithoutTime(startDateList[listOfMatchedEventIndex[index]]))
-            const interateFormattedDate = new Date(formatDateWithoutTime(startDateList[listOfMatchedEventIndex[j]]))
-
-            if(pointerFormattedDate > interateFormattedDate){
-              let temp = listOfMatchedEventIndex[j+1]
-              listOfMatchedEventIndex[j+1] = listOfMatchedEventIndex[index]
-              listOfMatchedEventIndex[index] = temp
-              return true
-            }
-            else{
-              return false
-            }
-          }
-        }
-  
-        while(DateSorter(i) === true){
-          DateSorter(i)
-        }
-        console.log(listOfMatchedEventIndex)
-        for(let i=0; i<listOfMatchedEventIndex.length; i++){
-          console.log(commentsList[i])
-        }
-      }
-    }
+  //create the elements that should be showned within the dialog
+  const dialogContent = () => {
     
-
-    for(let i=0; i<listOfMatchedEventIndex.length; i++){
-      let currentIndex = listOfMatchedEventIndex[i]
-      if(eventList[currentIndex] === 'food'){
-        listOfMatchedEvents.push(<div style={{ background: "aqua", margin: '3px' }}>{commentsList[currentIndex]}</div>)
-      }
-  
-      if(eventList[currentIndex] === 'travel'){
-        listOfMatchedEvents.push(<div style={{ background: "aquamarine", margin: '3px' }} >{locationList[currentIndex]}</div>)
-      }
-  
-      if(eventList[currentIndex] === 'others'){
-        listOfMatchedEvents.push(<div style={{ background: 'lemonchiffon ', margin: '3px'}}>{commentsList[currentIndex]}</div>)
-      }
-    }
-    
-    if(listOfMatchedEvents.length > 0){
-      return(
-        <div>
-            {listOfMatchedEvents}
-        </div>
-      ) 
-    }
-
+    return('Hello')
   }
 
 
-  function formatDateWithoutTime(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based
-    const day = String(date.getDate()).padStart(2, '0');
-  
-    return `${year}-${month}-${day}`;
-  }
-  
-
-  const renderHeader = () => {
-    return (
-      <div className="header">
-        <button onClick={prevMonth}>Prev</button>
-        <h2>{format(currentDateState, 'MMMM yyyy')}</h2>
-        <button onClick={nextMonth}>Next</button>
-      </div>
-    );
-  };
-
-
-  const renderDays = () => {
-    const dateFormat = 'eeee';
-    const days = [];
-    let startDate = startOfWeek(currentDateState);
-
-    for (let i = 0; i < 7; i++) {
-      days.push(
-        <div className="day" key={i}>
-          {format(addDays(startDate, i), dateFormat)}
-        </div>
-      );
-    }
-
-    return <div className="days">{days}</div>;
-  };
-
-
-  const renderCells = () => {
-    const monthStart = startOfMonth(currentDateState);
-    const monthEnd = endOfMonth(monthStart);
-    const startDate = startOfWeek(monthStart);
-    const endDate = endOfWeek(monthEnd);
-
-    const dateFormat = 'd';
-    const rows = [];
-    let days = [];
-    let day = startDate;
-    let formattedDate = '';
-
-    while (day <= endDate) {
-      for (let i = 0; i < 7; i++) {
-        formattedDate = format(day, dateFormat);
-        const cloneDay = day;
-        days.push(
-          <div
-            className={`cell ${!isSameMonth(day, monthStart) ? 'disabled' : ''}`}
-            key={day.toString()}
-            onClick={() => handleDateClick(cloneDay)}
-          >
-            {formattedDate}
-            {GetCellType(formattedDate)}
-            {isLoading ? (<p>Loading...</p>) : (renderCurrentDayEvents(day))}
-          </div>
-        );
-        day = addDays(day, 1);
-      }
-      rows.push(
-        <div className="row" key={day.toString()}>
-          {days}
-        </div>
-      );
-      days = [];
-    }
-
-    return <div className="body">{rows}</div>;
-  };
-
-
-  const GetCellType = (formattedDate: String) =>{
-
-    return(
-      <div className=''>
-      </div>
-    )
+  //function that closes the modal when user exits the modal
+  const handleSelectDateClose = () =>{
+    setOpen(false)
   }
 
 
-  const prevMonth = () => {
-    setCurrentDate((prevDate) => addDays(startOfMonth(prevDate), -1));
-    setCurrentMonthState(currentMonthState - 1)
-  };
-
-
-  const nextMonth = () => {
-    setCurrentDate((prevDate) => addDays(endOfMonth(prevDate), 1));
-    setCurrentMonthState(currentMonthState + 1)
-  };
-
-
-  const handleDateClick = (date: Date) => {
-    onSelectDate(date);
-  };
-
-  
+  //create the html elements
   return (
-    <div className="calendar-container">
-      {renderHeader()}
-      {renderDays()}
-      {renderCells()}
+    <div className="App">
+      <CalendarCells currentDate={new Date()} onSelectDate={handleSelectDate} />
+      <Dialog open={open} onClose={handleSelectDateClose}>
+      <DialogTitle className='dialog-title'>Title Placeholder</DialogTitle>
+      <DialogContent>
+        <p>{dialogContent()}</p>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleSelectDateClose} color="primary">
+          Close
+        </Button>
+        <Button onClick={handleSelectDateClose} color="primary">
+          Save
+        </Button>
+      </DialogActions>
+      </Dialog>
     </div>
   );
-};
+}
 
 export default Calendar;

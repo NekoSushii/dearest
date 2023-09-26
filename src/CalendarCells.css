@@ -1,0 +1,104 @@
+/* Calendar container */
+.calendar-container {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    min-width: 800px;
+    min-height: 500px;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Calendar header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  /* Calendar navigation buttons */
+  .header button {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    outline: none;
+  }
+  
+  /* Calendar month title */
+  .header h2 {
+    margin: 0;
+    font-size: 20px;
+  }
+  
+  /* Calendar days of the week */
+  .days {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f0f0f0;
+    padding: 10px 0;
+  }
+  
+  .day {
+    width: calc(100% / 7);
+    font-weight: bold;
+  }
+
+  .row{
+    display: flex;
+  }
+  
+  /* Calendar cells */
+  .body {
+    /* display: flex;
+    flex-wrap: wrap; */
+    padding: 10px;
+  }
+  
+  .cell {
+    text-align: justify;
+    width: calc(100% / 7);
+    min-height: 75px;
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+  }
+
+  .cell-food{
+    background-color: aqua;
+  }
+
+  .cell-outing{
+    background-color: bisque;
+  }
+
+  .cell-busy{
+    background-color: red;
+  }
+
+  .cell:hover{
+    transition: background-color 0.2s;
+    background-color: grey;
+  }
+  
+  /* Disabled cells (belonging to previous or next month) */
+  .cell.disabled {
+    color: #ccc;
+    pointer-events: none;
+  }
+  
+  /* Highlighted cell (e.g., selected date) */
+  .cell.highlighted {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .dialog-title{
+    text-align: center;
+}
