@@ -6,9 +6,10 @@ import Home from './components/Home';
 import Calendar from './components/Calendar';
 import Login from './components/Login'
 import './style/App.css'
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 function App(){
-
 
     function NavigationBar() {
         const CheckLogin = () => {
@@ -38,6 +39,7 @@ function App(){
           const logout =()=>{
             sessionStorage.clear()
             window.location.reload()
+            toast.success('Logged out')
           }
 
 
@@ -54,18 +56,19 @@ function App(){
 
     return (
         <div className='bg'>
-        <Router>
-            {NavigationBar()}
-            <DndProvider backend={HTML5Backend}>
-                <div className='maincon'>
-                    <Routes>
-                        <Route path='/dearest' element={<Home/>}/>
-                        <Route path='/calendar' element={<Calendar/>}/>
-                        <Route path='/login' element={<Login/>}/>
-                    </Routes>
-                </div>
-            </DndProvider>
-        </Router>
+            <Router>
+                {NavigationBar()}
+                <DndProvider backend={HTML5Backend}>
+                    <div className='maincon'>
+                        <Routes>
+                            <Route path='/dearest' element={<Home/>}/>
+                            <Route path='/calendar' element={<Calendar/>}/>
+                            <Route path='/login' element={<Login/>}/>
+                        </Routes>
+                    </div>
+                </DndProvider>
+            </Router>
+            <ToastContainer position='top-right' autoClose={1500} hideProgressBar={true} pauseOnFocusLoss pauseOnHover/>
         </div>
       );
 }

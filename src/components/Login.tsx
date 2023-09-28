@@ -57,7 +57,7 @@ function Login(){
                     sessionStorage.setItem('name', logindetails[i])
                     navigate('/dearest')
                     window.location.reload()
-                    toast.success('Loged in as '+formValue.username)
+                    toast.success('Logged in as '+ logindetails[i])
                     return
                 }   
             }
