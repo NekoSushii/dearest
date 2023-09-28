@@ -55,9 +55,9 @@ function Login(){
                 console.log(loginPW[i],'login pw')
                 if(md5(formValue.password) === loginPW[i]){
                     sessionStorage.setItem('name', logindetails[i])
+                    sessionStorage.setItem('toast', 'true')
                     navigate('/dearest')
                     window.location.reload()
-                    toast.success('Logged in as '+ logindetails[i])
                     return
                 }   
             }

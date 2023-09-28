@@ -14,6 +14,13 @@ function App(){
     function NavigationBar() {
         const CheckLogin = () => {
             if(sessionStorage.getItem('name') != null){
+                const customId = 'lol'
+                
+                if(sessionStorage.getItem('toast') === 'true') {
+                    toast.success('Logged in as ' + sessionStorage.getItem('name'), {toastId: customId})
+                    sessionStorage.setItem('toast', 'false')
+                }
+                
               return(
                 <div>
                     <li className='navitem_float_left'>
@@ -67,8 +74,9 @@ function App(){
                         </Routes>
                     </div>
                 </DndProvider>
+                <ToastContainer position='top-right' autoClose={3000} pauseOnFocusLoss pauseOnHover theme='colored'/>
             </Router>
-            <ToastContainer position='top-right' autoClose={1500} hideProgressBar={true} pauseOnFocusLoss pauseOnHover/>
+            
         </div>
       );
 }
