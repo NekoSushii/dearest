@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import {db} from '../firebase'
 import {collection, getDocs} from 'firebase/firestore'
 import { toast} from "react-toastify";
+import '../style/Login.css'
 
 import bichon from '../resources/image/bichon.png'
 
@@ -55,7 +56,7 @@ function Login(){
                 console.log(loginPW[i],'login pw')
                 if(md5(formValue.password) === loginPW[i]){
                     sessionStorage.setItem('name', logindetails[i])
-                    sessionStorage.setItem('toast', 'true')
+                    sessionStorage.setItem('toast', 'yes')
                     navigate('/dearest')
                     window.location.reload()
                     return
