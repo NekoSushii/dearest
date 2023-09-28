@@ -34,7 +34,7 @@ function Home(){
     for (var i = 0; i < reveals.length; i++) {
       var windowHeight = window.innerHeight;
       var elementTop = reveals[i].getBoundingClientRect().top;
-      var elementVisible = 150;
+      var elementVisible = 10;
   
       if (elementTop < windowHeight - elementVisible) {
         reveals[i].classList.add("active");
@@ -50,7 +50,7 @@ function Home(){
     return(
     <ul>
       {contentList.map((item, index) => (
-        <div className={index === 0 ? '' : 'reveal'}>
+        <div className={index <= 1 ? '' : 'reveal'}>
           <li className='blog_container'>
 
             <header className='title_header'>{item.header}</header>

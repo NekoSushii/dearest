@@ -9,7 +9,6 @@ import { collection, getDocs } from 'firebase/firestore';
 
 function Calendar() {
   let currentDate = new Date()
-  let totalEventList: (any)[][] = []
   const [open, setOpen] = useState(false)
   const [currentDateState, setCurrentDate] = useState(currentDate);
   const [eventsData, setEventsData] = useState<any[]>([])
@@ -141,10 +140,6 @@ function Calendar() {
     
     //populated the cell with the list of html elements to be created
     if(listOfMatchedEvents.length > 0){
-      totalEventList.push([date, eventList])
-      // console.log(date)
-      // console.log(eventList)
-
       return(
         <div>
             {listOfMatchedEvents}
@@ -278,12 +273,7 @@ function Calendar() {
   const dialogContent = () => {
     let date = new Date()
     let eventList = []
-
-    for(let i=0; i<totalEventList.length; i++){
-      let event = totalEventList[i]
-      date = new Date(formatDateWithoutTime(event[0]))
-      eventList = event[1]
-    }
+    
     
     return('Hello')
   }
