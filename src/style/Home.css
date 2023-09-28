@@ -1,91 +1,240 @@
+/* animations */
 .reveal{
-    position: relative;
-    transform: translateY(150px);
-    opacity: 0;
-    transition: 1s all ease;
+  position: relative;
+  transform: translateY(150px);
+  opacity: 0;
+  transition: 1s all ease;
+}
+
+.reveal.active{
+  transform: translateY(0);
+  opacity: 1;
+}
+
+
+/* content */
+.blog_container{
+  min-height: 30%;
+  font-size: larger;
+  list-style-type: none;
+  padding-bottom: 30rem;
+}
+
+.title_header{
+  width: 100%;
+  padding: 1%;
+  height: auto;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  font-size: x-large;
+}
+
+.bodytext-left{
+  float: left;
+  text-align: justify;
+  width: 50%;
+  min-height: 20rem;
+}
+  
+.bodytext-right{
+  float: right;
+  text-align: justify;
+  width: 50%;
+  min-height: 20rem;
+}
+
+.imgcontainer-picture{
+  width: 50%;
+  float: right;
+  min-height: 20rem;
+}
+  
+.mainpageimg-right{
+  padding-top: 10%;
+  width: 90%;
+  height: auto;
+  float:right;
+}
+  
+.mainpageimg-left{
+  padding-top: 10%;
+  width: 90%;
+  height: auto;
+  float:left;
+}
+
+  
+
+
+ 
+/* 1080P */
+@media (max-width:1080px){
+  .blog_container{
+    min-height: 30%;
+    font-size: large;
+    list-style-type: none;
+    padding-bottom: 22rem;
   }
   
-  .reveal.active{
-    transform: translateY(0);
-    opacity: 1;
+  .title_header{
+    width: 100%;
+    padding: 1%;
+    height: auto;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
   }
-
+  
   .bodytext-left{
     float: left;
     text-align: justify;
     width: 50%;
     min-height: 20rem;
   }
-  
+    
   .bodytext-right{
     float: right;
     text-align: justify;
     width: 50%;
     min-height: 20rem;
   }
-
+  
   .imgcontainer-picture{
     width: 50%;
     float: right;
     min-height: 20rem;
-
   }
-  
+    
   .mainpageimg-right{
     padding-top: 10%;
-    width: 80%;
-    height: 14rem;
+    width: 90%;
+    height: auto;
     float:right;
   }
-  
+    
   .mainpageimg-left{
     padding-top: 10%;
-    width: 80%;
-    height: 14rem;
+    width: 90%;
+    height: auto;
     float:left;
   }
-  
-  .animate__zoomInLeft{
-    animation: bounce;
-    animation-duration: 2s;
-  }
-  
-  .animate__zoomInRight{
-    animation: bounce;
-    animation-duration: 2s;
-  }
+}
 
+
+
+
+
+
+/* 720p */
+@media (max-width:720px){
+  .blog_container{
+    min-height: 30%;
+    font-size: medium;
+    list-style-type: none;
+    padding-bottom: 15rem;
+  }
+  
   .title_header{
     width: 100%;
-    padding: 10px;
-    height: 10rm;
+    height: auto;
+    padding: 3%;
     background-color: #333;
     color: #fff;
-    font-size: 40px;
     text-align: center;
+    height: auto;
   }
-
-  .blog_container{
-    min-height: 30rm;
-    padding-bottom: 30%;
-    font-size: medium;
+  
+  .bodytext-left{
+    float: left;
+    text-align: justify;
+    width: 50%;
+    min-height: 15rem;
   }
-
-  @media (max-width: 768px){
-    .title_header{
-        width: 100%;
-        padding: 10px;
-        height: 10rm;
-        background-color: #333;
-        color: #fff;
-        font-size: large;
-        text-align: center;
-      }
     
-      .blog_container{
-        min-height: 30rm;
-        padding-bottom: 30%;
-        font-size: small;
-      }
+  .bodytext-right{
+    float: right;
+    text-align: justify;
+    width: 50%;
+    min-height: 15rem;
   }
+  
+  .imgcontainer-picture{
+    width: 50%;
+    float: right;
+    min-height: 15rem;
+  }
+    
+  .mainpageimg-right{
+    padding-top: 10%;
+    width: 90%;
+    height: auto;
+    float:right;
+  }
+    
+  .mainpageimg-left{
+    padding-top: 10%;
+    width: 90%;
+    height: auto;
+    float:left;
+  }
+}
 
+
+
+
+
+
+/* 640p   */
+@media (max-width:640px){
+  .blog_container{
+    min-height: 30%;
+    font-size: small;
+    list-style-type: none;
+    padding-bottom: 13rem;
+  }
+  
+  .title_header{
+    width: 100%;
+    height: auto;
+    padding: 3%;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    height: auto;
+  }
+  
+  .bodytext-left{
+    float: left;
+    text-align: justify;
+    width: 50%;
+    min-height: 15rem;
+  }
+    
+  .bodytext-right{
+    float: right;
+    text-align: justify;
+    width: 50%;
+    min-height: 15rem;
+  }
+  
+  .imgcontainer-picture{
+    width: 50%;
+    float: right;
+    min-height: 15rem;
+  }
+    
+  .mainpageimg-right{
+    padding-top: 10%;
+    width: 90%;
+    height: auto;
+    float:right;
+  }
+    
+  .mainpageimg-left{
+    padding-top: 10%;
+    width: 90%;
+    height: auto;
+    float:left;
+  }
+}
