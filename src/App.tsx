@@ -14,12 +14,7 @@ function App(){
     function NavigationBar() {
         const CheckLogin = () => {
             if(sessionStorage.getItem('name') != null){
-                const customId = 'lol'
-                
-                if(sessionStorage.getItem('toast') === 'true') {
-                    toast.success('Logged in as ' + sessionStorage.getItem('name'), {toastId: customId})
-                    sessionStorage.setItem('toast', 'false')
-                }
+                // const customId = 'lol'
                 
               return(
                 <div>
@@ -46,7 +41,7 @@ function App(){
           const logout =()=>{
             sessionStorage.clear()
             window.location.reload()
-            toast.success('Logged out')
+            sessionStorage.setItem('toast', 'out')
           }
 
 
@@ -60,11 +55,23 @@ function App(){
         );
     }
 
+    
+    const toastNotification = () => {
+        if(sessionStorage.getItem('toast') === 'true') {
+            toast.success('Logged in as ' + sessionStorage.getItem('name'))
+            sessionStorage.setItem('toast', 'false')
+        }
+        else if(sessionStorage.getItem('toast') === 'out'){
+            sessionStorage.clear()
+            toast.success('Successfully logged out')
+        }
+    }
 
     return (
         <div className='bg'>
             <Router>
                 {NavigationBar()}
+                {toastNotification()}
                 <DndProvider backend={HTML5Backend}>
                     <div className='maincon'>
                         <Routes>
