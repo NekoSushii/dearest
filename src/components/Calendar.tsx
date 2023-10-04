@@ -4,8 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth } from 'date-fns';
 import { db } from '../firebase';
-
-import { collection, getDocs } from 'firebase/firestore';
+import { toast} from "react-toastify";
+import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import * as Yup from "yup";
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import dayjs, { Dayjs } from 'dayjs';
 
 function Calendar() {
   let currentDate = new Date()
@@ -14,6 +21,8 @@ function Calendar() {
   const [eventsData, setEventsData] = useState<any[]>([])
   const [currentMonthState, setCurrentMonthState] = useState(currentDate.getMonth())
   const [isLoading, setIsLoading] = useState(true)
+  const [selectedStartDate, setselectedStartDate] = React.useState<Dayjs | null>(dayjs(currentDateState));
+  const [selectedEndDate, setselectedEndDate] = React.useState<Dayjs | null>(dayjs(currentDateState));
 
 
   //fetch the data from firebase into a useState
@@ -35,7 +44,6 @@ function Calendar() {
           locationList.push(tempEvents[i].data.location)
           commentList.push(tempEvents[i].data.comments)
         }
-
         const combinedList = []
         combinedList.push(startDateList, endDateList, eventList, locationList, commentList)
         setEventsData(combinedList)
@@ -59,8 +67,23 @@ function Calendar() {
 
 
   //function to encode the date-string that will be stored within firebase
-  const FirebaseDateEncoder = () => {
-    
+  const FirebaseDateEncoder = (date: Date) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    };
+  const dateString = date.toLocaleDateString('en-SG', options).split('/').join('-')
+  const timeString = date.toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+
+  const customFormattedString = `${dateString} ${timeString}`;
+
+  return(customFormattedString)
   }
 
 
@@ -157,6 +180,14 @@ function Calendar() {
     const day = String(date.getDate()).padStart(2, '0');
   
     return `${year}-${month}-${day}`;
+  }
+
+
+
+  function FormatDateToText(date: Date){
+    const dateString = format(date, 'dd MMMM yyyy')
+
+    return(dateString)
   }
   
 
@@ -269,13 +300,112 @@ function Calendar() {
   }
 
 
+  const handleDialogSubmit = (values: any, {resetForm}: any) => {
+    const dbRef = collection(db, "events")
+
+    if(selectedStartDate?.toDate() !== undefined){
+      let localStartDate = FirebaseDateEncoder(selectedStartDate?.toDate())
+
+      if(selectedEndDate?.toDate() !== undefined){
+        let localEndDate = FirebaseDateEncoder(selectedEndDate?.toDate())
+
+        const dataToStore = {
+          event: values.event,
+          comments: values.event,
+          startDateTime: localStartDate,
+          endDateTime: localEndDate,
+          location: values.location
+        }
+
+        console.log(dataToStore)
+    
+        addDoc(dbRef, dataToStore).then(response => {
+          toast.success(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    
+        setOpen(false)
+      }
+    }
+  }
+
+
   //create the elements that should be showned within the dialog
   const dialogContent = () => {
     let date = new Date()
     let eventList = []
+
+    const initialValues = {
+    }
+
+    const validationSchema = Yup.object().shape({
+      event: Yup.string().nullable().required('Event name is required'),
+      comments: Yup.string().nullable().required('Description is required'),
+      location: Yup.string().nullable().required('location isrequired'),
+    })
+
     
-    
-    return('Hello')
+    return(
+    <div className='dialog-form'>
+      <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleDialogSubmit}
+      >
+        <Form>
+          <div>
+            <label>Event:</label>
+            <Field type="text" name="event"/>
+            <ErrorMessage name="event" component="div"/>
+          </div>
+
+          <div>
+            <label>Description:</label>
+            <Field type="text" name="comments"/>
+            <ErrorMessage name="comments" component="div"/>
+          </div>
+
+          <label>Start Date:</label>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={['DateTimePicker', 'DateTimePicker']}>
+              <DateTimePicker
+                // label="Controlled picker"
+                value={selectedStartDate}
+                onChange={(newValue) => setselectedStartDate(newValue)}
+              />
+            </DemoContainer>
+          </LocalizationProvider>
+
+          <label>End Date:</label>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={['DateTimePicker', 'DateTimePicker']}>
+              <DateTimePicker
+                // label="Controlled picker"
+                value={selectedEndDate}
+                onChange={(newValue) => setselectedEndDate(newValue)}
+              />
+            </DemoContainer>
+          </LocalizationProvider>
+
+          <div>
+            <label>Location:</label>
+            <Field type="text" name="location"/>
+            <ErrorMessage name="location" component="div"/>
+          </div>
+
+          <button type="submit">Submit</button>
+        </Form>
+      </Formik>
+    </div>)
+  }
+
+
+  const getTitle = () => {
+    let formattedDate = FormatDateToText(currentDateState)
+
+    return(formattedDate)
   }
 
 
@@ -288,16 +418,13 @@ function Calendar() {
         {renderCells()}
       </div>
       <Dialog open={open} onClose={handleDialogClose}>
-      <DialogTitle className='dialog-title'>Title Placeholder</DialogTitle>
+      <DialogTitle className='dialog-title'>{getTitle()}</DialogTitle>
       <DialogContent>
         <p>{dialogContent()}</p>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleDialogClose} color="primary">
           Close
-        </Button>
-        <Button onClick={handleDialogClose} color="primary">
-          Save
         </Button>
       </DialogActions>
       </Dialog>

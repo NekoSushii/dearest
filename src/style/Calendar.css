@@ -101,7 +101,33 @@
   
   .dialog-title{
     text-align: center;
-}
+  }
+
+  .dialog-form{
+  }
+
+  input[type="text"],
+  textarea {
+    width: 100%;
+    padding: 1%;
+    margin-bottom: 5%;
+    border: 1% solid #ccc;
+    border-radius: 1%;
+  }
+
+  button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5%;
+    border: none;
+    border-radius: 1%;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
 
 
 
