@@ -13,6 +13,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs, { Dayjs } from 'dayjs';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 function Calendar() {
   let currentDate = new Date()
@@ -23,6 +28,7 @@ function Calendar() {
   const [isLoading, setIsLoading] = useState(true)
   const [selectedStartDate, setselectedStartDate] = React.useState<Dayjs | null>(dayjs(currentDateState));
   const [selectedEndDate, setselectedEndDate] = React.useState<Dayjs | null>(dayjs(currentDateState));
+  const [selectedEvent, setSelectedEvent] =  React.useState('')
 
 
   //fetch the data from firebase into a useState
@@ -208,7 +214,7 @@ function Calendar() {
   const renderDays = () => {
     const dateFormat = 'eeee';
     const days = [];
-    let startDate = startOfWeek(currentDateState);
+    let startDate = startOfWeek(currentDateState, {weekStartsOn: 1});
 
     for (let i = 0; i < 7; i++) {
       days.push(
@@ -227,7 +233,7 @@ function Calendar() {
   const renderCells = () => {
     const monthStart = startOfMonth(currentDateState);
     const monthEnd = endOfMonth(monthStart);
-    const startDate = startOfWeek(monthStart);
+    const startDate = startOfWeek(monthStart, {weekStartsOn: 1});
     const endDate = endOfWeek(monthEnd);
 
     const dateFormat = 'd';
@@ -289,14 +295,17 @@ function Calendar() {
 
   //function that opens the modal when user clicks on a date cell
   const handleDialogOpen = (date: Date) => {
-    setOpen(true)
     setCurrentDate(date);
+    setselectedStartDate(dayjs(date))
+    setselectedEndDate(dayjs(date))
+    setOpen(true)
   };
 
 
   //function that closes the modal when user exits the modal
   const handleDialogClose = () =>{
     setOpen(false)
+    setSelectedEvent('')
   }
 
 
@@ -308,10 +317,11 @@ function Calendar() {
 
       if(selectedEndDate?.toDate() !== undefined){
         let localEndDate = FirebaseDateEncoder(selectedEndDate?.toDate())
+        console.log(selectedEvent)
 
         const dataToStore = {
-          event: values.event,
-          comments: values.event,
+          event: selectedEvent,
+          comments: values.comments,
           startDateTime: localStartDate,
           endDateTime: localEndDate,
           location: values.location
@@ -334,18 +344,18 @@ function Calendar() {
 
   //create the elements that should be showned within the dialog
   const dialogContent = () => {
-    let date = new Date()
-    let eventList = []
 
     const initialValues = {
     }
 
     const validationSchema = Yup.object().shape({
-      event: Yup.string().nullable().required('Event name is required'),
       comments: Yup.string().nullable().required('Description is required'),
       location: Yup.string().nullable().required('location isrequired'),
     })
 
+    const handleEventChange = (event: SelectChangeEvent) => {
+      setSelectedEvent(event.target.value as string);
+    };
     
     return(
     <div className='dialog-form'>
@@ -355,11 +365,22 @@ function Calendar() {
       onSubmit={handleDialogSubmit}
       >
         <Form>
-          <div>
-            <label>Event:</label>
-            <Field type="text" name="event"/>
-            <ErrorMessage name="event" component="div"/>
-          </div>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Event</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedEvent}
+                label="Event"
+                onChange={handleEventChange}
+              >
+                <MenuItem value={'food'}>Food</MenuItem>
+                <MenuItem value={'travel'}>others</MenuItem>
+                <MenuItem value={'others'}>travel</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
 
           <div>
             <label>Description:</label>
