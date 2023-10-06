@@ -576,7 +576,7 @@ function Calendar() {
                   >
                     <MenuItem value={'food'}>Food</MenuItem>
                     <MenuItem value={'travel'}>Travel</MenuItem>
-                    <MenuItem value={'others'}>travel</MenuItem>
+                    <MenuItem value={'others'}>Others</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
