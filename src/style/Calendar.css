@@ -129,6 +129,33 @@
     background-color: #0056b3;
   }
 
+  .scrolling-calendar {
+    display: flex;
+  }
+  
+  .time-slots {
+    width: auto;
+    overflow-y: hidden;
+  }
+  
+  .time-slot {
+    padding: 5px;
+    border-bottom: 1px solid black;
+    width:50px;
+  }
+  
+  .events {
+    flex-grow: 1;
+    border-bottom: 1px solid black;
+  }
+
+  .emptydiv {
+    padding: 5px;
+    border-bottom: 1px solid black;
+    /* border-left: 1px solid black;
+    border-right: 1px solid black; */
+  }
+
 
 
 
@@ -191,5 +218,6 @@
     padding: 5px;
     margin: 5px;
     cursor: pointer;
+    overflow-x: hidden;
   }
 }

@@ -51,9 +51,9 @@ function Login(){
     async function handleLogin(formValue: { username: string; password: string; }) {
         for(let i=0;i<loginlist.length;i++){
             if(loginlist[i] === formValue.username){
-                console.log(i,'i')
-                console.log(md5(formValue.password))
-                console.log(loginPW[i],'login pw')
+                // console.log(i,'i')
+                // console.log(md5(formValue.password))
+                // console.log(loginPW[i],'login pw')
                 if(md5(formValue.password) === loginPW[i]){
                     sessionStorage.setItem('name', logindetails[i])
                     sessionStorage.setItem('toast', 'true')

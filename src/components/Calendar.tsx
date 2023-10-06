@@ -29,10 +29,17 @@ function Calendar() {
   const [selectedStartDate, setselectedStartDate] = React.useState<Dayjs | null>(dayjs(currentDateState));
   const [selectedEndDate, setselectedEndDate] = React.useState<Dayjs | null>(dayjs(currentDateState));
   const [selectedEvent, setSelectedEvent] =  React.useState('')
+  const [toggleDialog, setToggleDialog] = React.useState(false)
+  const [timeSlots, setTimeSlots] = useState<string[]>([]);
+
+  
+  const startTime = 1
+  const endTime = 23
 
 
   //fetch the data from firebase into a useState
   useEffect(() => {
+
     async function fetchData(){
       await getDocs(collection(db, 'events')).then((response: any) => {
 
@@ -57,7 +64,12 @@ function Calendar() {
     });}
 
     fetchData()
+    
   },[currentDate, setCurrentDate])
+
+  useEffect(() => {
+    setTimeSlots(generateTimeSlots());
+  }, []);
 
 
   //function to decode the date-string to Date object that is stored within firebase
@@ -73,7 +85,7 @@ function Calendar() {
 
 
   //function to encode the date-string that will be stored within firebase
-  const FirebaseDateEncoder = (date: Date) => {
+  const FirebaseDateEncoder = (date: Date, dateOnly?: boolean) => {
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: '2-digit',
@@ -89,21 +101,27 @@ function Calendar() {
 
   const customFormattedString = `${dateString} ${timeString}`;
 
+  if(dateOnly === true){
+    return(dateString)
+  }
+  else if(dateOnly ===false){
+    return(timeString)
+  }
+
   return(customFormattedString)
   }
 
 
 
-  //function to populate the events that will exist within the date of the cell
-  const renderCurrentDayEvents = (date: Date) => {
+  function GetMatchedEventIndex(date: Date){
     const startDateList = eventsData[0]
     const endDateList = eventsData[1]
-    const eventList = eventsData[2]
-    const locationList = eventsData[3]
-    const commentsList = eventsData[4]
+    var listOfMatchedEventIndex: (number)[] = []
     const dateFormatted: Date = new Date(formatDateWithoutTime(date))
-    const listOfMatchedEvents = []
-    const listOfMatchedEventIndex: (number)[] = []
+
+    if(startDateList === undefined){
+      return
+    }
 
     //push into a list the index of events that includes the cell's dates
     for(let i=0; i<startDateList.length; i++){
@@ -149,21 +167,38 @@ function Calendar() {
       }
     }
 
+    return listOfMatchedEventIndex
+  }
+
+
+
+  //function to populate the events that will exist within the date of the cell
+  const renderCurrentDayEvents = (date: Date) => {
+    const startDateList = eventsData[0]
+    const endDateList = eventsData[1]
+    const eventList = eventsData[2]
+    const locationList = eventsData[3]
+    const commentsList = eventsData[4]
+    const listOfMatchedEvents = []
+    var listOfMatchedEventIndex: (number)[] = []
+
+    listOfMatchedEventIndex = GetMatchedEventIndex(date) || []
+
     //Once the list of index of events is sorted, push into a list html elements of the event with style
     for(let i=0; i<listOfMatchedEventIndex.length; i++){
       let currentIndex = listOfMatchedEventIndex[i]
       eventList.push([startDateList[currentIndex], endDateList[currentIndex], eventList[currentIndex], commentsList[currentIndex], locationList[currentIndex]])
 
       if(eventList[currentIndex] === 'food'){
-        listOfMatchedEvents.push(<div style={{ background: "aqua", margin: '3px' }}>{commentsList[currentIndex]}</div>)
+        listOfMatchedEvents.push(<div style={{ background: "aqua", margin: '5px', borderRadius: '5px', padding: '3px' }}>{commentsList[currentIndex]}</div>)
       }
   
       if(eventList[currentIndex] === 'travel'){
-        listOfMatchedEvents.push(<div style={{ background: "aquamarine", margin: '3px' }} >{locationList[currentIndex]}</div>)
+        listOfMatchedEvents.push(<div style={{ background: "aquamarine", margin: '5px', borderRadius: '5px', padding: '3px' }} >{commentsList[currentIndex]}</div>)
       }
   
       if(eventList[currentIndex] === 'others'){
-        listOfMatchedEvents.push(<div style={{ background: 'lemonchiffon ', margin: '3px'}}>{commentsList[currentIndex]}</div>)
+        listOfMatchedEvents.push(<div style={{ background: 'lemonchiffon ', margin: '5px', borderRadius: '5px', padding: '3px' }}>{commentsList[currentIndex]}</div>)
       }
     }
     
@@ -306,6 +341,7 @@ function Calendar() {
   const handleDialogClose = () =>{
     setOpen(false)
     setSelectedEvent('')
+    setToggleDialog(false)
   }
 
 
@@ -342,6 +378,38 @@ function Calendar() {
   }
 
 
+  function DeleteEvent(index: number){
+    const dbRef = collection(db, "events")
+    
+    
+  }
+
+
+  const swapDialog = () => {
+    if(toggleDialog === true){
+      setToggleDialog(false)
+    }
+
+    else{
+      setToggleDialog(true)
+    }
+  }
+
+
+  const generateTimeSlots = () => {
+    const slots: string[] = []
+
+    for (let hour=startTime; hour<=endTime; hour++){
+      for (let minutes=0; minutes<60; minutes += 30){
+        const time = `${hour}:${minutes === 0 ? '00' : minutes}`
+        slots.push(time)
+      }
+    }
+
+    return slots
+  }
+
+
   //create the elements that should be showned within the dialog
   const dialogContent = () => {
 
@@ -356,70 +424,170 @@ function Calendar() {
     const handleEventChange = (event: SelectChangeEvent) => {
       setSelectedEvent(event.target.value as string);
     };
+
+    const backToTime = (timeString: String) => {
+      const [hours, minutes] = timeString.split(':').map(Number)
+
+      if (!isNaN(hours) && !isNaN(minutes)) {
+        const date = new Date();
+        date.setHours(hours, minutes, 0, 0);
+        return(date)
+      }
+      else return(new Date())
+    }
+
+
+    //toggle starts
+    if(toggleDialog === false){
+      var listOfMatchedEventIndex: (number)[] = []
+
+      listOfMatchedEventIndex = GetMatchedEventIndex(currentDateState) || []
+      // console.log(listOfMatchedEventIndex.length)
+      
+      const renderDialogEvents = () => {
+        const startDateList = eventsData[0]
+        const endDateList = eventsData[1]
+        const eventList = eventsData[2]
+        const locationList = eventsData[3]
+        const commentsList = eventsData[4]
+        var outputList = []
+
+        const getOnlyHoursMinutes = (date: Date) => {
+          const hours = date.getHours().toString().padStart(2, '0');
+          const minutes = date.getMinutes().toString().padStart(2, '0');
+
+          return `${hours}:${minutes}`;
+        }
+
+        if(listOfMatchedEventIndex.length > 0){
+          for (let i=0; i<listOfMatchedEventIndex.length; i++){
+            var eventsList = []
+            for (let hour=startTime; hour<=endTime; hour++){
+              for (let minutes=0; minutes<60; minutes += 30){
+                const time = `${hour}:${minutes === 0 ? '00' : minutes}`
+                const startTimeString: String = getOnlyHoursMinutes(startDateList[listOfMatchedEventIndex[i]])
+                const endTimeString: String = getOnlyHoursMinutes(endDateList[listOfMatchedEventIndex[i]])
+
+                const startTime = backToTime(startTimeString)
+                const endTime = backToTime(endTimeString)
+                const currentTime = backToTime(time)
+
+                if(currentTime >= startTime && currentTime <= endTime){
+                  if(eventList[listOfMatchedEventIndex[i]] === 'food'){
+                    eventsList.push(<div className='emptydiv' style={{background: 'aqua'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])}>{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                  }
+
+                  if(eventList[listOfMatchedEventIndex[i]] === 'travel'){
+                    eventsList.push(<div className='emptydiv' style={{background: 'aquamarine'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])}>{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                  }
+
+                  if(eventList[listOfMatchedEventIndex[i]] === 'others'){
+                    eventsList.push(<div className='emptydiv' style={{background: 'lemonchiffon'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])}>{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                  }
+                }
+                else{
+                  eventsList.push(<div className='emptydiv'>&nbsp;</div>)
+                }
+              }
+            }
+
+            outputList.push(<div className='events'>{eventsList}</div>)
+          }
+        }
+
+        return(
+          <>
+          {outputList}
+          </>
+        )
+      }
+
+      return(
+        <>
+        <div className='dialog-form'>
+          <div className="scrolling-calendar">
+            <div className="time-slots">
+              {timeSlots.map((time, index) => (
+                <div key={index} className="time-slot">
+                  {time}
+                </div>
+              ))}
+            </div>
+            {renderDialogEvents()}
+          </div>
+        </div>
+        </>
+      )
+    }
+
+    else{
+      return(
+        
+        <div className='dialog-form'>
+          <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleDialogSubmit}
+          >
+            <Form>
+              <Box sx={{ minWidth: 200 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Event</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={selectedEvent}
+                    label="Event"
+                    onChange={handleEventChange}
+                  >
+                    <MenuItem value={'food'}>Food</MenuItem>
+                    <MenuItem value={'travel'}>Travel</MenuItem>
+                    <MenuItem value={'others'}>travel</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
     
-    return(
-    <div className='dialog-form'>
-      <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleDialogSubmit}
-      >
-        <Form>
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Event</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectedEvent}
-                label="Event"
-                onChange={handleEventChange}
-              >
-                <MenuItem value={'food'}>Food</MenuItem>
-                <MenuItem value={'travel'}>others</MenuItem>
-                <MenuItem value={'others'}>travel</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-
-          <div>
-            <label>Description:</label>
-            <Field type="text" name="comments"/>
-            <ErrorMessage name="comments" component="div"/>
-          </div>
-
-          <label>Start Date:</label>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DateTimePicker', 'DateTimePicker']}>
-              <DateTimePicker
-                // label="Controlled picker"
-                value={selectedStartDate}
-                onChange={(newValue) => setselectedStartDate(newValue)}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-
-          <label>End Date:</label>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DateTimePicker', 'DateTimePicker']}>
-              <DateTimePicker
-                // label="Controlled picker"
-                value={selectedEndDate}
-                onChange={(newValue) => setselectedEndDate(newValue)}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-
-          <div>
-            <label>Location:</label>
-            <Field type="text" name="location"/>
-            <ErrorMessage name="location" component="div"/>
-          </div>
-
-          <button type="submit">Submit</button>
-        </Form>
-      </Formik>
-    </div>)
+              <div>
+                <label>Description:</label>
+                <Field type="text" name="comments"/>
+                <ErrorMessage name="comments" component="div"/>
+              </div>
+    
+              <label>Start Date:</label>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DateTimePicker', 'DateTimePicker']}>
+                  <DateTimePicker
+                    // label="Controlled picker"
+                    value={selectedStartDate}
+                    onChange={(newValue) => setselectedStartDate(newValue)}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+    
+              <label>End Date:</label>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DateTimePicker', 'DateTimePicker']}>
+                  <DateTimePicker
+                    // label="Controlled picker"
+                    value={selectedEndDate}
+                    onChange={(newValue) => setselectedEndDate(newValue)}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+    
+              <div>
+                <label>Location:</label>
+                <Field type="text" name="location"/>
+                <ErrorMessage name="location" component="div"/>
+              </div>
+    
+              <button type="submit">Submit</button>
+            </Form>
+          </Formik>
+        </div>
+      )
+    }
+    
   }
 
 
@@ -427,6 +595,17 @@ function Calendar() {
     let formattedDate = FormatDateToText(currentDateState)
 
     return(formattedDate)
+  }
+
+
+  const toggleButton = () => {
+    if(toggleDialog === true){
+      return(<Button onClick={swapDialog} style={{float: 'inline-start'}}>Back</Button>)
+    }
+
+    else{
+      return(<Button onClick={swapDialog} style={{float: 'inline-start'}}>Create Event</Button>)
+    }
   }
 
 
@@ -444,6 +623,7 @@ function Calendar() {
         <p>{dialogContent()}</p>
       </DialogContent>
       <DialogActions>
+        {toggleButton()}
         <Button onClick={handleDialogClose} color="primary">
           Close
         </Button>
