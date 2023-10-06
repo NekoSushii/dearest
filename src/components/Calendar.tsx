@@ -5,7 +5,7 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth } from 'date-fns';
 import { db } from '../firebase';
 import { toast} from "react-toastify";
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from "yup";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -31,6 +31,7 @@ function Calendar() {
   const [selectedEvent, setSelectedEvent] =  React.useState('')
   const [toggleDialog, setToggleDialog] = React.useState(false)
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
+  const [isShown, setIsShown] = useState(false)
 
   
   const startTime = 1
@@ -353,7 +354,6 @@ function Calendar() {
 
       if(selectedEndDate?.toDate() !== undefined){
         let localEndDate = FirebaseDateEncoder(selectedEndDate?.toDate())
-        console.log(selectedEvent)
 
         const dataToStore = {
           event: selectedEvent,
@@ -362,8 +362,6 @@ function Calendar() {
           endDateTime: localEndDate,
           location: values.location
         }
-
-        console.log(dataToStore)
     
         addDoc(dbRef, dataToStore).then(response => {
           toast.success(response)
@@ -378,10 +376,42 @@ function Calendar() {
   }
 
 
-  function DeleteEvent(index: number){
+  async function DeleteEvent(index: number){
     const dbRef = collection(db, "events")
-    
-    
+    const startDateList = eventsData[0]
+    const endDateList = eventsData[1]
+    const eventList = eventsData[2]
+    const locationList = eventsData[3]
+    const commentsList = eventsData[4]
+    var commentID: string[] = []
+    var startID: string[] = []
+
+    const q1 = query(dbRef, where('comments', '==', commentsList[index]))
+    const querySnapshot1 = await getDocs(q1)
+    querySnapshot1.forEach((doc) => {
+      // console.log(doc.id, " => ", doc.data())
+      commentID.push(doc.id)
+    })
+
+    const q2 = query(dbRef, where('startDateTime', '==', startDateList[index]))
+    const querySnapshot2 = await getDocs(q1)
+    querySnapshot2.forEach((doc) => {
+      startID.push(doc.id)
+    })
+
+    for(let i=0; i<commentID.length; i++){
+      for(let j=0; j<startID.length; j++){
+        if(commentID[i] === startID[j]){
+          // eslint-disable-next-line no-restricted-globals
+          if(confirm('Delete Event?') === true){
+            await deleteDoc(doc(db, 'events', commentID[i])).then
+            (response => {
+              toast.success('Deleted')
+            })
+          }
+        }
+      }
+    }
   }
 
 
@@ -459,6 +489,10 @@ function Calendar() {
           return `${hours}:${minutes}`;
         }
 
+        function hover(e: any) {
+          e.target.style.cursor = 'pointer';
+        }
+
         if(listOfMatchedEventIndex.length > 0){
           for (let i=0; i<listOfMatchedEventIndex.length; i++){
             var eventsList = []
@@ -474,15 +508,15 @@ function Calendar() {
 
                 if(currentTime >= startTime && currentTime <= endTime){
                   if(eventList[listOfMatchedEventIndex[i]] === 'food'){
-                    eventsList.push(<div className='emptydiv' style={{background: 'aqua'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])}>{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                    eventsList.push(<div className='emptydiv' style={{background: 'aqua'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])} onMouseOver={hover} onMouseEnter={() => setIsShown(true)}>{commentsList[listOfMatchedEventIndex[i]]}</div>)
                   }
 
                   if(eventList[listOfMatchedEventIndex[i]] === 'travel'){
-                    eventsList.push(<div className='emptydiv' style={{background: 'aquamarine'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])}>{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                    eventsList.push(<div className='emptydiv' style={{background: 'aquamarine'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])} onMouseOver={hover} onMouseEnter={() => setIsShown(true)}>{commentsList[listOfMatchedEventIndex[i]]}</div>)
                   }
 
                   if(eventList[listOfMatchedEventIndex[i]] === 'others'){
-                    eventsList.push(<div className='emptydiv' style={{background: 'lemonchiffon'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])}>{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                    eventsList.push(<div className='emptydiv' style={{background: 'lemonchiffon'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])} onMouseOver={hover} onMouseEnter={() => setIsShown(true)}>{commentsList[listOfMatchedEventIndex[i]]}</div>)
                   }
                 }
                 else{
