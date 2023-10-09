@@ -5,9 +5,23 @@ import '../style/Home.css'
 import imageOne from '../resources/image/WeiLing_Birthday_150923.jpg'
 import imageTwo from '../resources/image/0230916_madefood.jpg'
 import imageThree from '../resources/image/20230922_dinner.jpg'
+import imageFour from '../resources/image/20231007_CWS_dinner.jpg'
+import imageFive from '../resources/image/20231008_nox.jpg'
 
 function Home(){
   const contentList: any[]= [
+    {
+      header: 'Birthday Dinner at Nox',
+      date: '8 October 2023',
+      body: 'Dearest brought me to have dinner at Nox, where we dined in the dark, and were served by waiters who are visually impared. The waiter with the nice voice talked dearest to a deep slumber with his deep soothing voice. I need to step up my game in the future to plan a fun dinner as well!!!',
+      image: imageFive
+    },
+    {
+      header: 'Dinner with newly weds, Chee Wei and Sarah',
+      date: '7 October 2023',
+      body: 'Had dinner with the newly weds at the last minute, met many interesting characters such as mermaid and Benny, hope dearest not too traumatised by the experience, and can join them for more dinners in the future',
+      image: imageFour
+    },
     {
       header: 'First Cycling Trip With StanChart Gang',
       date: '22 September 2023',
