@@ -1,19 +1,21 @@
 {
   "files": {
     "main.css": "/dearest/static/css/main.7a5a4ccf.css",
-    "main.js": "/dearest/static/js/main.856ea646.js",
+    "main.js": "/dearest/static/js/main.7b5921bb.js",
     "static/js/787.edd59a96.chunk.js": "/dearest/static/js/787.edd59a96.chunk.js",
     "static/media/20230922_dinner.jpg": "/dearest/static/media/20230922_dinner.dffde543540d2f4337f0.jpg",
     "static/media/WeiLing_Birthday_150923.jpg": "/dearest/static/media/WeiLing_Birthday_150923.1e518aaeb4d7ef3a824f.jpg",
+    "static/media/20231007_CWS_dinner.jpg": "/dearest/static/media/20231007_CWS_dinner.872c0071c005a5f352ac.jpg",
     "static/media/0230916_madefood.jpg": "/dearest/static/media/0230916_madefood.5a6c17811e378303473c.jpg",
     "static/media/bichon.png": "/dearest/static/media/bichon.a7a67741ccb09da5997c.png",
+    "static/media/20231008_nox.jpg": "/dearest/static/media/20231008_nox.7359a3660c4f0b4e74d5.jpg",
     "index.html": "/dearest/index.html",
     "main.7a5a4ccf.css.map": "/dearest/static/css/main.7a5a4ccf.css.map",
-    "main.856ea646.js.map": "/dearest/static/js/main.856ea646.js.map",
+    "main.7b5921bb.js.map": "/dearest/static/js/main.7b5921bb.js.map",
     "787.edd59a96.chunk.js.map": "/dearest/static/js/787.edd59a96.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7a5a4ccf.css",
-    "static/js/main.856ea646.js"
+    "static/js/main.7b5921bb.js"
   ]
 }
