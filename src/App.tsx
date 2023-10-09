@@ -1,5 +1,5 @@
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
-import { DndProvider } from 'react-dnd'
+// import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import Home from './components/Home';
@@ -72,7 +72,7 @@ function App(){
             <Router>
                 {NavigationBar()}
                 {toastNotification()}
-                <DndProvider backend={HTML5Backend}>
+                {/* <DndProvider backend={HTML5Backend}> */}
                     <div className='maincon'>
                         <Routes>
                             <Route path='/dearest' element={<Home/>}/>
@@ -80,7 +80,7 @@ function App(){
                             <Route path='/login' element={<Login/>}/>
                         </Routes>
                     </div>
-                </DndProvider>
+                {/* </DndProvider> */}
                 <ToastContainer position='top-right' autoClose={3000} pauseOnFocusLoss pauseOnHover theme='colored'/>
             </Router>
             
