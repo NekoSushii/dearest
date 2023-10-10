@@ -31,7 +31,6 @@ function Calendar() {
   const [selectedEvent, setSelectedEvent] =  React.useState('')
   const [toggleDialog, setToggleDialog] = React.useState(false)
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
-  const [isShown, setIsShown] = useState(false)
 
   
   const startTime = 1
@@ -113,7 +112,7 @@ function Calendar() {
   }
 
 
-
+  //function that returns the matched events for the calendar-time view
   function GetMatchedEventIndex(date: Date){
     const startDateList = eventsData[0]
     const endDateList = eventsData[1]
@@ -225,14 +224,13 @@ function Calendar() {
   }
 
 
-
+  //function used to format from Date object to a string used for title
   function FormatDateToText(date: Date){
     const dateString = format(date, 'dd MMMM yyyy')
 
     return(dateString)
   }
   
-
 
   //functional component that creates html elements and logic to update state of calendar month
   const renderHeader = () => {
@@ -346,6 +344,7 @@ function Calendar() {
   }
 
 
+  //function that handles when user press submit button to create an event on the calendar
   const handleDialogSubmit = (values: any, {resetForm}: any) => {
     const dbRef = collection(db, "events")
 
@@ -376,6 +375,7 @@ function Calendar() {
   }
 
 
+  //function to delete event when the user clicks on the event
   async function DeleteEvent(index: number){
     const dbRef = collection(db, "events")
     const startDateList = eventsData[0]
@@ -415,6 +415,7 @@ function Calendar() {
   }
 
 
+  //function used to toggle between the calendar-time view and the create event view
   const swapDialog = () => {
     if(toggleDialog === true){
       setToggleDialog(false)
@@ -426,6 +427,7 @@ function Calendar() {
   }
 
 
+  //function used to generate the timeslots for the calendar-time view
   const generateTimeSlots = () => {
     const slots: string[] = []
 
@@ -508,15 +510,15 @@ function Calendar() {
 
                 if(currentTime >= startTime && currentTime <= endTime){
                   if(eventList[listOfMatchedEventIndex[i]] === 'food'){
-                    eventsList.push(<div className='emptydiv' style={{background: 'aqua'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])} onMouseOver={hover} onMouseEnter={() => setIsShown(true)}>{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                    eventsList.push(<div className='emptydiv' style={{background: 'aqua'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])} onMouseOver={hover} >{commentsList[listOfMatchedEventIndex[i]]}</div>)
                   }
 
                   if(eventList[listOfMatchedEventIndex[i]] === 'travel'){
-                    eventsList.push(<div className='emptydiv' style={{background: 'aquamarine'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])} onMouseOver={hover} onMouseEnter={() => setIsShown(true)}>{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                    eventsList.push(<div className='emptydiv' style={{background: 'aquamarine'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])} onMouseOver={hover} >{commentsList[listOfMatchedEventIndex[i]]}</div>)
                   }
 
                   if(eventList[listOfMatchedEventIndex[i]] === 'others'){
-                    eventsList.push(<div className='emptydiv' style={{background: 'lemonchiffon'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])} onMouseOver={hover} onMouseEnter={() => setIsShown(true)}>{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                    eventsList.push(<div className='emptydiv' style={{background: 'lemonchiffon'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])} onMouseOver={hover} >{commentsList[listOfMatchedEventIndex[i]]}</div>)
                   }
                 }
                 else{
@@ -625,6 +627,7 @@ function Calendar() {
   }
 
 
+  //function that returns the title
   const getTitle = () => {
     let formattedDate = FormatDateToText(currentDateState)
 
@@ -632,6 +635,7 @@ function Calendar() {
   }
 
 
+  //function that creates the button that toggles the button along with the screen
   const toggleButton = () => {
     if(toggleDialog === true){
       return(<Button onClick={swapDialog} style={{float: 'inline-start'}}>Back</Button>)
