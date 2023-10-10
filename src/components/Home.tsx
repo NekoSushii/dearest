@@ -7,9 +7,16 @@ import imageTwo from '../resources/image/0230916_madefood.jpg'
 import imageThree from '../resources/image/20230922_dinner.jpg'
 import imageFour from '../resources/image/20231007_CWS_dinner.jpg'
 import imageFive from '../resources/image/20231008_nox.jpg'
+import imageSix from '../resources/image/20231010_PHcake.jpg'
 
 function Home(){
   const contentList: any[]= [
+    {
+      header: 'Birthday cake at home',
+      date: '9 October 2023',
+      body: 'Birthday cake at home with familiar faces as well as some new ones. Birthday cake courtesy of Dearest is delicious, better than BangawanSolo and Swensens. All this was preceded by a tiring walk in the hot sweltering sun in the far flung island of NTU, followed by a surprisingly nice dinner at Collins where being a alumni came to be useful. Time to go cycle more :) ',
+      image: imageSix
+    },
     {
       header: 'Birthday Dinner at Nox',
       date: '8 October 2023',
@@ -48,7 +55,7 @@ function Home(){
     for (var i = 0; i < reveals.length; i++) {
       var windowHeight = window.innerHeight;
       var elementTop = reveals[i].getBoundingClientRect().top;
-      var elementVisible = 10;
+      var elementVisible = 0;
   
       if (elementTop < windowHeight - elementVisible) {
         reveals[i].classList.add("active");
