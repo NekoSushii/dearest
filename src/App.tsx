@@ -4,7 +4,8 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import Home from './components/Home';
 import Calendar from './components/Calendar';
-import Login from './components/Login'
+import Login from './components/Login';
+import Game from './components/Game';
 import './style/App.css'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,6 +21,7 @@ function App(){
                 <div>
                     <li className='navitem_float_left'>
                     <Link to={'/calendar'} className='navlink'>Calendar</Link>
+                    <Link to={'/game'} className='navlink'>Game</Link>
                     </li>
                     <li className='navitem_float_right'>Welcome {sessionStorage.getItem('name')}!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a style={{cursor: "pointer"}} onClick={logout} className='navlink_a'>Logout</a>
@@ -78,6 +80,7 @@ function App(){
                             <Route path='/dearest' element={<Home/>}/>
                             <Route path='/calendar' element={<Calendar/>}/>
                             <Route path='/login' element={<Login/>}/>
+                            <Route path='/game' element={<Game/>}/>
                         </Routes>
                     </div>
                 {/* </DndProvider> */}
