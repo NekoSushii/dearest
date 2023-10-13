@@ -20,8 +20,10 @@ function App(){
               return(
                 <div>
                     <li className='navitem_float_left'>
-                    <Link to={'/calendar'} className='navlink'>Calendar</Link>
-                    <Link to={'/game'} className='navlink'>Game</Link>
+                      <Link to={'/calendar'} className='navlink'>Calendar</Link>
+                    </li>
+                    <li className='navitem_float_left'>
+                      <Link to={'/game'} className='navlink'>Game</Link>
                     </li>
                     <li className='navitem_float_right'>Welcome {sessionStorage.getItem('name')}!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a style={{cursor: "pointer"}} onClick={logout} className='navlink_a'>Logout</a>
