@@ -20,10 +20,10 @@ function App(){
               return(
                 <div>
                     <li className='navitem_float_left'>
-                      <Link to={'/calendar'} className='navlink'>Calendar</Link>
+                      <Link to={'/dearest/calendar'} className='navlink'>Calendar</Link>
                     </li>
                     <li className='navitem_float_left'>
-                      <Link to={'/game'} className='navlink'>Game</Link>
+                      <Link to={'/dearest/game'} className='navlink'>Game</Link>
                     </li>
                     <li className='navitem_float_right'>Welcome {sessionStorage.getItem('name')}!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a style={{cursor: "pointer"}} onClick={logout} className='navlink_a'>Logout</a>
@@ -35,7 +35,7 @@ function App(){
             else{
               return(
                 <li className='navitem_float_right'>
-                  <Link  to={'/login'} className='navlink'>Login</Link>
+                  <Link  to={'/dearest/login'} className='navlink'>Login</Link>
                 </li>
               )
             }
@@ -44,7 +44,7 @@ function App(){
         
           const logout =()=>{
             sessionStorage.clear()
-            window.location.reload()
+            window.location.href = '/dearest'
             sessionStorage.setItem('toast', 'out')
           }
 
@@ -80,9 +80,9 @@ function App(){
                     <div className='maincon'>
                         <Routes>
                             <Route path='/dearest' element={<Home/>}/>
-                            <Route path='/calendar' element={<Calendar/>}/>
-                            <Route path='/login' element={<Login/>}/>
-                            <Route path='/game' element={<Game/>}/>
+                            <Route path='/dearest/calendar' element={<Calendar/>}/>
+                            <Route path='/dearest/login' element={<Login/>}/>
+                            <Route path='/dearest/game' element={<Game/>}/>
                         </Routes>
                     </div>
                 {/* </DndProvider> */}

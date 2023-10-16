@@ -20,6 +20,7 @@ function Game(){
     const [herAnswer, setHerAnswer] = useState('')
     const [selectedOption, setSelectedOption] = useState('')
     const [helperText, setHelperText] = useState('Choose wisely')
+    const [OwO, setOwO] = useState(false)
 
     useEffect(() => {
 
@@ -40,7 +41,7 @@ function Game(){
         fetchData()
         
         
-      },[])
+      },[OwO])
 
 
       //handle event when the radio buttons are clicked
@@ -75,13 +76,14 @@ function Game(){
           // eslint-disable-next-line no-restricted-globals
           if(confirm('Sure you want to submit?') === true){
             addDoc(dbRef, dataToStore).then(response => {
-              window.location.reload()
               toast.success("Answer submitted")
             })
             .catch(error => {
               console.log(error)
             })
           }
+
+          setOwO(true)
 
         }
       };
@@ -135,8 +137,8 @@ function Game(){
             return(
               <>
               <div>
-                <h1>WeiLing, WELCOME TO THE GAME!!!!!</h1>
-                <h2 style={{color: 'red'}}>Do you know your love well enought? Today you shall be exposed!</h2>
+                <h1>Wei Ling, WELCOME TO THE GAME!!!!!</h1>
+                <h2 style={{color: 'red'}}>Do you know your love well enough? Today you shall be exposed!</h2>
               </div>
 
               <div>
@@ -145,7 +147,7 @@ function Game(){
                     <FormLabel id="demo-radio-buttons-group-label">Choose</FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue="female"
+                      defaultValue="eye1"
                       name="radio-buttons-group"
                       onChange={handleRadioChange}
                     >
@@ -178,7 +180,6 @@ function Game(){
           }
 
           else{
-            console.log(herAnswer)
             return(
               <div>
                 <h1>Well Done WeiLing!!!</h1>
