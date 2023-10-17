@@ -8,9 +8,16 @@ import imageThree from '../resources/image/20230922_dinner.jpg'
 import imageFour from '../resources/image/20231007_CWS_dinner.jpg'
 import imageFive from '../resources/image/20231008_nox.jpg'
 import imageSix from '../resources/image/20231010_PHcake.jpg'
+import imageSeven from '../resources/image/15102023_coffee.jpeg'
 
 function Home(){
   const contentList: any[]= [
+    {
+      header: 'Hand pour coffee workshop',
+      date: '14 October 2023',
+      body: 'Coffee good',
+      image: imageSeven
+    },
     {
       header: 'Birthday cake at home',
       date: '9 October 2023',
