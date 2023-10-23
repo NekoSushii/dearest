@@ -35,6 +35,7 @@ function Calendar() {
   
   const startTime = 1
   const endTime = 23
+  const events = ['food', 'travel', 'others']
 
 
   //fetch the data from firebase into a useState
@@ -348,31 +349,37 @@ function Calendar() {
   const handleDialogSubmit = (values: any, {resetForm}: any) => {
     const dbRef = collection(db, "events")
 
-    if(selectedStartDate?.toDate() !== undefined){
-      let localStartDate = FirebaseDateEncoder(selectedStartDate?.toDate())
-
-      if(selectedEndDate?.toDate() !== undefined){
-        let localEndDate = FirebaseDateEncoder(selectedEndDate?.toDate())
-
-        const dataToStore = {
-          event: selectedEvent,
-          comments: values.comments,
-          startDateTime: localStartDate,
-          endDateTime: localEndDate,
-          location: values.location
+    if(events.includes(selectedEvent)){
+      if(selectedStartDate?.toDate() !== undefined){
+        let localStartDate = FirebaseDateEncoder(selectedStartDate?.toDate())
+  
+        if(selectedEndDate?.toDate() !== undefined){
+          let localEndDate = FirebaseDateEncoder(selectedEndDate?.toDate())
+  
+          const dataToStore = {
+            event: selectedEvent,
+            comments: values.comments,
+            startDateTime: localStartDate,
+            endDateTime: localEndDate,
+            location: values.location
+          }
+      
+          addDoc(dbRef, dataToStore).then(response => {
+            toast.success(response)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      
+          setOpen(false)
         }
-    
-        addDoc(dbRef, dataToStore).then(response => {
-          toast.success(response)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    
-        setOpen(false)
       }
     }
+    else{
+      alert('Please enter a event')
+    }
   }
+    
 
 
   //function to delete event when the user clicks on the event

@@ -91,7 +91,7 @@ function App(){
                         </Routes>
                     </div>
                 {/* </DndProvider> */}
-                <ToastContainer position='top-right' autoClose={3000} pauseOnFocusLoss pauseOnHover theme='colored'/>
+                <ToastContainer position='top-right' autoClose={1500} pauseOnFocusLoss pauseOnHover theme='colored'/>
             </Router>
             
         </div>

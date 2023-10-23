@@ -9,7 +9,7 @@ const SpinningWheel = () => {
   const spin = () => {
     // Calculate the rotation angle
     const randomAngle = Math.floor(Math.random() * sectionDegrees);
-    const totalRotation = 180 * 3; // Rotate 3 half circles (semicircles)
+    const totalRotation = 180 * 3; 
     const finalRotation = totalRotation + randomAngle;
 
     // Rotate the wheel
