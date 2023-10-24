@@ -350,6 +350,7 @@ function Calendar() {
     const dbRef = collection(db, "events")
 
     if(events.includes(selectedEvent)){
+      
       if(selectedStartDate?.toDate() !== undefined){
         let localStartDate = FirebaseDateEncoder(selectedStartDate?.toDate())
   
