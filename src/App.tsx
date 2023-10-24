@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Game from './components/Game';
 import Wheel from './components/SpinningWheel'
 import Timeline from './components/Timeline'
+import News from './components/News'
 import './style/App.css'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -57,6 +58,9 @@ function App(){
                 <Link to={'/dearest'} className='navlink'>Home</Link>
             </li>
             <li className='navitem_float_left'>
+                <Link to={'/dearest/news'} className='navlink'>News</Link>
+            </li>
+            <li className='navitem_float_left'>
                 <Link to={'/dearest/timeline'} className='navlink'>Timeline</Link>
             </li>
             <li className='navitem_float_left'>
@@ -93,6 +97,7 @@ function App(){
                             <Route path='/dearest/game' element={<Game/>}/>
                             <Route path='/dearest/wheel' element={<Wheel/>}/>
                             <Route path='/dearest/timeline' element={<Timeline/>}/>
+                            <Route path='/dearest/news' element={<News/>}/>
                         </Routes>
                     </div>
                 {/* </DndProvider> */}

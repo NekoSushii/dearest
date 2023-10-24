@@ -75,30 +75,39 @@ function Home(){
 
 
   function content() {
-    return(
-    <ul>
-      {contentList.map((item, index) => (
-        <div className={index <= 1 ? '' : 'reveal'}>
-          <li className='blog_container'>
+    if(sessionStorage.getItem('name') != null){
+      return(
+      <ul>
+        {contentList.map((item, index) => (
+          <div className={index <= 1 ? '' : 'reveal'}>
+            <li className='blog_container'>
 
-            <header className='title_header'>{item.header}</header>
-            <h2>{item.date}</h2>
+              <header className='title_header'>{item.header}</header>
+              <h2>{item.date}</h2>
 
-            <div className={index % 2 === 0 ? 'bodytext-left' : 'bodytext-right'}>
-              <p>{item.body}</p>
-            </div>
+              <div className={index % 2 === 0 ? 'bodytext-left' : 'bodytext-right'}>
+                <p>{item.body}</p>
+              </div>
 
-            <div className='imgcontainer-picture'>
-              <img src={item.image} className={index % 2 === 0 ? 'mainpageimg-right' : 'mainpageimg-left'}/>
-            </div>
+              <div className='imgcontainer-picture'>
+                <img src={item.image} className={index % 2 === 0 ? 'mainpageimg-right' : 'mainpageimg-left'}/>
+              </div>
 
-          </li>
-        </div>
-        
-      ))}
-    </ul>
-    )
-    
+            </li>
+          </div>
+          
+        ))}
+      </ul>
+      )
+    }
+
+    else{
+      return(
+        <>
+        <h1>Please Login to view blog</h1>
+        </>
+      )
+    }
   }
 
 

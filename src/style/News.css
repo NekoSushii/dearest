@@ -1,0 +1,13 @@
+.title_header{
+    width: 100%;
+    padding: 1%;
+    height: auto;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    font-size: x-large;
+  }
+
+.article{
+    padding-bottom: 5%
+}
