@@ -37,7 +37,6 @@ export default function News() {
       })
       .catch(error => {
         console.error(error)
-        toast.error('Request failed')
     });
   }, []);
 

@@ -21,6 +21,7 @@
     font-size: 1rem;
     font-weight: 400;
     border: 0.05rem solid white;
+    max-height: 35rem;
   }
   
   .container{
@@ -43,6 +44,7 @@
     height: 3rem;
     border: 0.1rem solid black;
     background-color: #FFFFFF80;
+    font-size: small;
   }
   
   .button:hover{
