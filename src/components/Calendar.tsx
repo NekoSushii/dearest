@@ -31,6 +31,8 @@ function Calendar() {
   const [selectedEvent, setSelectedEvent] =  React.useState('')
   const [toggleDialog, setToggleDialog] = React.useState(false)
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
+  const [toggleEventView, setToggleEventView] = useState(false)
+  const [toggleEventViewIndex ,setToggleEventViewIndex] = useState<number>()
 
   
   const startTime = 1
@@ -342,6 +344,7 @@ function Calendar() {
     setOpen(false)
     setSelectedEvent('')
     setToggleDialog(false)
+    setToggleEventView(false)
   }
 
 
@@ -423,6 +426,17 @@ function Calendar() {
   }
 
 
+  const ScrollSwapDialog = (index: number) => {
+    if(toggleEventView === false){
+      setToggleEventView(true)
+      setToggleEventViewIndex(index)
+    }
+    else if(toggleEventView === true){
+      setToggleEventView(false)
+    }
+  }
+
+
   //function used to toggle between the calendar-time view and the create event view
   const swapDialog = () => {
     if(toggleDialog === true){
@@ -479,89 +493,129 @@ function Calendar() {
 
     //toggle starts
     if(toggleDialog === false){
-      var listOfMatchedEventIndex: (number)[] = []
+      if(toggleEventView === false){
 
-      listOfMatchedEventIndex = GetMatchedEventIndex(currentDateState) || []
-      // console.log(listOfMatchedEventIndex.length)
-      
-      const renderDialogEvents = () => {
-        const startDateList = eventsData[0]
-        const endDateList = eventsData[1]
-        const eventList = eventsData[2]
-        const locationList = eventsData[3]
-        const commentsList = eventsData[4]
-        var outputList = []
+        var listOfMatchedEventIndex: (number)[] = []
 
-        const getOnlyHoursMinutes = (date: Date) => {
-          const hours = date.getHours().toString().padStart(2, '0');
-          const minutes = date.getMinutes().toString().padStart(2, '0');
+        listOfMatchedEventIndex = GetMatchedEventIndex(currentDateState) || []
+        // console.log(listOfMatchedEventIndex.length)
+        
+        const renderDialogEvents = () => {
+          const startDateList = eventsData[0]
+          const endDateList = eventsData[1]
+          const eventList = eventsData[2]
+          const commentsList = eventsData[4]
+          var outputList = []
 
-          return `${hours}:${minutes}`;
-        }
+          const getOnlyHoursMinutes = (date: Date) => {
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
 
-        function hover(e: any) {
-          e.target.style.cursor = 'pointer';
-        }
+            return `${hours}:${minutes}`;
+          }
 
-        if(listOfMatchedEventIndex.length > 0){
-          for (let i=0; i<listOfMatchedEventIndex.length; i++){
-            var eventsList = []
-            for (let hour=startTime; hour<=endTime; hour++){
-              for (let minutes=0; minutes<60; minutes += 30){
-                const time = `${hour}:${minutes === 0 ? '00' : minutes}`
-                const startTimeString: String = getOnlyHoursMinutes(startDateList[listOfMatchedEventIndex[i]])
-                const endTimeString: String = getOnlyHoursMinutes(endDateList[listOfMatchedEventIndex[i]])
+          function hover(e: any) {
+            e.target.style.cursor = 'pointer';
+          }
 
-                const startTime = backToTime(startTimeString)
-                const endTime = backToTime(endTimeString)
-                const currentTime = backToTime(time)
+          if(listOfMatchedEventIndex.length > 0){
+            for (let i=0; i<listOfMatchedEventIndex.length; i++){
+              var eventsList = []
+              for (let hour=startTime; hour<=endTime; hour++){
+                for (let minutes=0; minutes<60; minutes += 30){
+                  const time = `${hour}:${minutes === 0 ? '00' : minutes}`
+                  const startTimeString: String = getOnlyHoursMinutes(startDateList[listOfMatchedEventIndex[i]])
+                  const endTimeString: String = getOnlyHoursMinutes(endDateList[listOfMatchedEventIndex[i]])
 
-                if(currentTime >= startTime && currentTime <= endTime){
-                  if(eventList[listOfMatchedEventIndex[i]] === 'food'){
-                    eventsList.push(<div className='emptydiv' style={{background: 'aqua'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])} onMouseOver={hover} >{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                  const startTime = backToTime(startTimeString)
+                  const endTime = backToTime(endTimeString)
+                  const currentTime = backToTime(time)
+
+                  if(currentTime >= startTime && currentTime <= endTime){
+                    if(eventList[listOfMatchedEventIndex[i]] === 'food'){
+                      eventsList.push(<div className='emptydiv' style={{background: 'aqua'}} onClick={() => ScrollSwapDialog(listOfMatchedEventIndex[i])} onMouseOver={hover} >{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                    }
+
+                    if(eventList[listOfMatchedEventIndex[i]] === 'travel'){
+                      eventsList.push(<div className='emptydiv' style={{background: 'aquamarine'}} onClick={() => ScrollSwapDialog(listOfMatchedEventIndex[i])} onMouseOver={hover} >{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                    }
+
+                    if(eventList[listOfMatchedEventIndex[i]] === 'others'){
+                      eventsList.push(<div className='emptydiv' style={{background: 'lemonchiffon'}} onClick={() => ScrollSwapDialog(listOfMatchedEventIndex[i])} onMouseOver={hover} >{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                    }
                   }
-
-                  if(eventList[listOfMatchedEventIndex[i]] === 'travel'){
-                    eventsList.push(<div className='emptydiv' style={{background: 'aquamarine'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])} onMouseOver={hover} >{commentsList[listOfMatchedEventIndex[i]]}</div>)
+                  else{
+                    eventsList.push(<div className='emptydiv'>&nbsp;</div>)
                   }
-
-                  if(eventList[listOfMatchedEventIndex[i]] === 'others'){
-                    eventsList.push(<div className='emptydiv' style={{background: 'lemonchiffon'}} onClick={() => DeleteEvent(listOfMatchedEventIndex[i])} onMouseOver={hover} >{commentsList[listOfMatchedEventIndex[i]]}</div>)
-                  }
-                }
-                else{
-                  eventsList.push(<div className='emptydiv'>&nbsp;</div>)
                 }
               }
-            }
 
-            outputList.push(<div className='events'>{eventsList}</div>)
+              outputList.push(<div className='events'>{eventsList}</div>)
+            }
           }
+
+          return(
+            <>
+            {outputList}
+            </>
+          )
         }
 
         return(
           <>
-          {outputList}
+          <div className='dialog-form'>
+            <div className="scrolling-calendar">
+              <div className="time-slots">
+                {timeSlots.map((time, index) => (
+                  <div key={index} className="time-slot">
+                    {time}
+                  </div>
+                ))}
+              </div>
+              {renderDialogEvents()}
+            </div>
+          </div>
           </>
         )
       }
 
-      return(
-        <>
-        <div className='dialog-form'>
-          <div className="scrolling-calendar">
-            <div className="time-slots">
-              {timeSlots.map((time, index) => (
-                <div key={index} className="time-slot">
-                  {time}
-                </div>
-              ))}
+      else{
+          const startDateList = eventsData[0]
+          const endDateList = eventsData[1]
+          const eventList = eventsData[2]
+          const locationList = eventsData[3]
+          const commentsList = eventsData[4]
+
+          var index = 0
+          if(toggleEventViewIndex === undefined){
+            toast.error('Something is wrong!')
+          }
+          else{
+            index = toggleEventViewIndex
+          }
+
+          return(
+            <>
+            <div>
+              <label>Event: {eventList[index]}</label>
             </div>
-            {renderDialogEvents()}
-          </div>
-        </div>
-        </>
-      )
+            <div>
+              <label>Details: {commentsList[index]}</label>
+            </div>
+            <div>
+              <label>Start Date: {FormatDateToText(startDateList[index])}</label>
+            </div>
+            <div>
+              <label>End Date: {FormatDateToText(endDateList[index])}</label>
+            </div>
+            <div>
+              <label>Location: {locationList[index]}</label>
+            </div>
+            <button onClick={() => DeleteEvent(index)}>Delete Event</button>
+            <button onClick={() => ScrollSwapDialog(index)} style={{float: 'right'}}>Event View</button>
+            </>
+          )
+      }
     }
 
     else{
@@ -632,6 +686,7 @@ function Calendar() {
       )
     }
     
+
   }
 
 
