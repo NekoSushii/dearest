@@ -9,13 +9,41 @@ import imageFour from '../resources/image/20231007_CWS_dinner.jpg'
 import imageFive from '../resources/image/20231008_nox.jpg'
 import imageSix from '../resources/image/20231010_PHcake.jpg'
 import imageSeven from '../resources/image/15102023_coffee.jpeg'
+import imageEight from '../resources/image/20231023_cookies.jpg'
+import image9 from '../resources/image/20231029_hotspring.jpg'
+import image10 from '../resources/image/20231027_cycling.jpg'
+import image11 from '../resources/image/20231022_TWG.jpg'
 
 function Home(){
   const contentList: any[]= [
     {
+      header: 'Sembawang Hotspring cycling adventure',
+      date: '29 October 2023',
+      body: 'Went cycling to Sembawang Hotspring Park, as it was the first for dearest, brought along 2 eggs, and dearest learned the dark truth about Yishun that day.',
+      image: image9
+    },
+    {
+      header: 'Second cycling trip with the StanChart Gang',
+      date: '27 October 2023',
+      body: 'On this second cycling trip, we cycled close to 30Km from MBFC to Changi Village. My butt was sore for days. I ate some sweat.',
+      image: image10
+    },
+    {
+      header: 'We baked cookies!',
+      date: '23 October 2023',
+      body: 'We made some doughy tasting chocolate chip cookies, but it smelled good though while it was in the oven. More eggs and butter next time!',
+      image: imageEight
+    },
+    {
+      header: 'Takashimaya Baking and TWG',
+      date: '23 October 2023',
+      body: 'Dearest made me some strange tiramisu, but since its my name, I enjoyed it. Had some golden TWG takeaway cups that were deemed un-reusable. Welp!',
+      image: image11
+    },
+    {
       header: 'Hand pour coffee workshop',
       date: '14 October 2023',
-      body: 'Coffee good',
+      body: 'Coffee good, but same same.',
       image: imageSeven
     },
     {
@@ -27,7 +55,7 @@ function Home(){
     {
       header: 'Birthday Dinner at Nox',
       date: '8 October 2023',
-      body: 'Dearest brought me to have dinner at Nox, where we dined in the dark, and were served by waiters who are visually impared. The waiter with the nice voice talked dearest to a deep slumber with his deep soothing voice. I need to step up my game in the future to plan a fun dinner as well!!!',
+      body: 'Dearest brought us to have dinner at Nox, where we dined in the dark, and were served by waiters who are visually impared. The waiter with the nice voice talked dearest to a deep slumber with his deep soothing voice. I need to step up my game in the future to plan a fun dinner as well!!!',
       image: imageFive
     },
     {
@@ -39,13 +67,13 @@ function Home(){
     {
       header: 'First Cycling Trip With StanChart Gang',
       date: '22 September 2023',
-      body: 'When Cycling with the StanChart Gang, had nice dinner together afterwords, thanks for the food dear!',
+      body: 'Went Cycling with the StanChart Gang, had nice dinner together afterwards, let this be a start to a long and fruitful cycling journey',
       image: imageThree
     },
     {
       header: 'Food',
       date: '16 September 2023',
-      body: 'Dearest made food for me, taste good!',
+      body: 'Dearest made Japanese-chinese fusion food for me, taste good! As well as a mochi pork floss bun with them UwU OwO.',
       image: imageTwo
     },
     {

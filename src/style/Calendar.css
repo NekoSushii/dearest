@@ -91,6 +91,7 @@
   .cell.disabled {
     color: #ccc;
     pointer-events: none;
+    background-color: white;
   }
   
   /* Highlighted cell (e.g., selected date) */
@@ -136,6 +137,7 @@
   .time-slots {
     width: auto;
     overflow-y: hidden;
+    overflow-x: hidden;
   }
   
   .time-slot {

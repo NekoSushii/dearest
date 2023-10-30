@@ -14,7 +14,7 @@
 
 /* content */
 .blog_container{
-  min-height: 30%;
+  min-height: 10rem;
   font-size: larger;
   list-style-type: none;
   padding-bottom: 35rem;
@@ -47,12 +47,12 @@
 .imgcontainer-picture{
   width: 50%;
   float: right;
-  /* min-height: 20rem; */
 }
   
 .mainpageimg-right{
   padding-top: 10%;
   width: 80%;
+  max-height: 180px;
 }
   
 .mainpageimg-left{
