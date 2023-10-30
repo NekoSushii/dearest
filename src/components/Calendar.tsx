@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth } from 'date-fns';
 import { db } from '../firebase';
-import { toast} from "react-toastify";
+import { ToastContainer, toast} from "react-toastify";
 import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from "yup";
@@ -33,6 +33,7 @@ function Calendar() {
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
   const [toggleEventView, setToggleEventView] = useState(false)
   const [toggleEventViewIndex ,setToggleEventViewIndex] = useState<number>()
+  const [toggleEditEvents, setToggleEditEvents] = useState(false)
 
   
   const startTime = 1
@@ -345,12 +346,16 @@ function Calendar() {
     setSelectedEvent('')
     setToggleDialog(false)
     setToggleEventView(false)
+    setToggleEditEvents(false)
   }
 
 
   //function that handles when user press submit button to create an event on the calendar
   const handleDialogSubmit = (values: any, {resetForm}: any) => {
     const dbRef = collection(db, "events")
+    console.log(events)
+    console.log(selectedStartDate)
+    console.log(selectedEndDate)
 
     if(events.includes(selectedEvent)){
       
@@ -377,10 +382,22 @@ function Calendar() {
       
           setOpen(false)
         }
+
+        else{
+          console.log('Please enter a end date')
+          toast.error('Please enter a end date')
+        }
+      }
+
+      else{
+        console.log('Please enter a start date')
+        toast.error('Please enter a start date')
       }
     }
+
     else{
-      alert('Please enter a event')
+      console.log('Please enter an event')
+      toast.error('Please enter an event')
     }
   }
     
@@ -418,11 +435,18 @@ function Calendar() {
             await deleteDoc(doc(db, 'events', commentID[i])).then
             (response => {
               toast.success('Deleted')
+              setToggleEventView(false)
             })
           }
         }
       }
     }
+  }
+
+
+  //function to edit document
+  async function EditDocument(){
+    alert('Sorry, edit function not yet completed')
   }
 
 
@@ -466,19 +490,6 @@ function Calendar() {
 
   //create the elements that should be showned within the dialog
   const dialogContent = () => {
-
-    const initialValues = {
-    }
-
-    const validationSchema = Yup.object().shape({
-      comments: Yup.string().nullable().required('Description is required'),
-      location: Yup.string().nullable().required('location isrequired'),
-    })
-
-    const handleEventChange = (event: SelectChangeEvent) => {
-      setSelectedEvent(event.target.value as string);
-    };
-
     const backToTime = (timeString: String) => {
       const [hours, minutes] = timeString.split(':').map(Number)
 
@@ -489,7 +500,6 @@ function Calendar() {
       }
       else return(new Date())
     }
-
 
     //toggle starts
     if(toggleDialog === false){
@@ -579,7 +589,7 @@ function Calendar() {
         )
       }
 
-      else{
+      else if(toggleEditEvents === false){
           const startDateList = eventsData[0]
           const endDateList = eventsData[1]
           const eventList = eventsData[2]
@@ -611,17 +621,55 @@ function Calendar() {
             <div>
               <label>Location: {locationList[index]}</label>
             </div>
-            <button onClick={() => DeleteEvent(index)}>Delete Event</button>
-            <button onClick={() => ScrollSwapDialog(index)} style={{float: 'right'}}>Event View</button>
+            <button onClick={() => changeEditEvent()}>Edit Event</button>
+            <button onClick={() => DeleteEvent(index)} style={{float: 'right'}}>Delete Event</button>
+            <button onClick={() => ScrollSwapDialog(index)} >Back to Event View</button>
             </>
           )
+      }
+
+      else{
+
+
+        return(
+          <>
+          {editDialogForm()}
+          <button onClick={() => setToggleEditEvents(false)}>Back </button>
+          </>
+        )
       }
     }
 
     else{
       return(
-        
-        <div className='dialog-form'>
+        <>
+        {createEventDialogForm()}
+        </>
+      )
+    }
+  }
+
+
+  const changeEditEvent = () => {
+    setToggleEditEvents(true)
+  }
+
+
+  const createEventDialogForm = () => {
+    const initialValues = {
+    }
+
+    const validationSchema = Yup.object().shape({
+      comments: Yup.string().nullable().required('Description is required'),
+      location: Yup.string().nullable().required('location isrequired'),
+    })
+
+    const handleEventChange = (event: SelectChangeEvent) => {
+      setSelectedEvent(event.target.value as string);
+    };
+
+    return(
+      <div className='dialog-form'>
           <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -683,10 +731,98 @@ function Calendar() {
             </Form>
           </Formik>
         </div>
-      )
-    }
-    
+    )
+  }
 
+
+
+  const editDialogForm = () => {
+    
+    return(
+      <>
+      <div>
+        Sorry, Edit function under construction
+      </div>
+      </>
+    )
+
+    // const initialValues = {
+    // }
+
+    // const validationSchema = Yup.object().shape({
+    //   comments: Yup.string().nullable().required('Description is required'),
+    //   location: Yup.string().nullable().required('location isrequired'),
+    // })
+
+    // const handleEventChange = (event: SelectChangeEvent) => {
+    //   setSelectedEvent(event.target.value as string);
+    // };
+
+    // return(
+        
+    //   <div className='dialog-form'>
+    //     <Formik
+    //     initialValues={initialValues}
+    //     validationSchema={validationSchema}
+    //     onSubmit={EditDocument}
+    //     >
+    //       <Form>
+    //         <Box sx={{ minWidth: 200 }}>
+    //           <FormControl fullWidth>
+    //             <InputLabel id="demo-simple-select-label">Event</InputLabel>
+    //             <Select
+    //               labelId="demo-simple-select-label"
+    //               id="demo-simple-select"
+    //               value={selectedEvent}
+    //               label="Event"
+    //               onChange={handleEventChange}
+    //             >
+    //               <MenuItem value={'food'}>Food</MenuItem>
+    //               <MenuItem value={'travel'}>Travel</MenuItem>
+    //               <MenuItem value={'others'}>Others</MenuItem>
+    //             </Select>
+    //           </FormControl>
+    //         </Box>
+  
+    //         <div>
+    //           <label>Description:</label>
+    //           <Field type="text" name="comments"/>
+    //           <ErrorMessage name="comments" component="div"/>
+    //         </div>
+  
+    //         <label>Start Date:</label>
+    //         <LocalizationProvider dateAdapter={AdapterDayjs}>
+    //           <DemoContainer components={['DateTimePicker', 'DateTimePicker']}>
+    //             <DateTimePicker
+    //               // label="Controlled picker"
+    //               value={selectedStartDate}
+    //               onChange={(newValue) => setselectedStartDate(newValue)}
+    //             />
+    //           </DemoContainer>
+    //         </LocalizationProvider>
+  
+    //         <label>End Date:</label>
+    //         <LocalizationProvider dateAdapter={AdapterDayjs}>
+    //           <DemoContainer components={['DateTimePicker', 'DateTimePicker']}>
+    //             <DateTimePicker
+    //               // label="Controlled picker"
+    //               value={selectedEndDate}
+    //               onChange={(newValue) => setselectedEndDate(newValue)}
+    //             />
+    //           </DemoContainer>
+    //         </LocalizationProvider>
+  
+    //         <div>
+    //           <label>Location:</label>
+    //           <Field type="text" name="location"/>
+    //           <ErrorMessage name="location" component="div"/>
+    //         </div>
+  
+    //         <button type="submit">Submit Change</button>
+    //       </Form>
+    //     </Formik>
+    //   </div>
+    // )
   }
 
 
