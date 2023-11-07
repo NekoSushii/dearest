@@ -7,8 +7,9 @@ import Calendar from './components/Calendar';
 import Login from './components/Login';
 import Game from './components/Game';
 import Wheel from './components/SpinningWheel'
-import Timeline from './components/Timeline'
-import News from './components/News'
+import Timeline from './components/news/Timeline'
+import News from './components/news/News'
+import MapOverlay from './components/Weather/MapOverlay';
 import './style/App.css'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -25,8 +26,11 @@ function App(){
                     <li className='navitem_float_left'>
                       <Link to={'/dearest/calendar'} className='navlink'>Calendar</Link>
                     </li>
-                    <li className='navitem_float_left'>
+                    {/* <li className='navitem_float_left'>
                       <Link to={'/dearest/game'} className='navlink'>Game</Link>
+                    </li> */}
+                    <li className='navitem_float_left'>
+                        <Link to={'/dearest/weather'} className='navlink'>Weather</Link>
                     </li>
                     <li className='navitem_float_right'>Welcome {sessionStorage.getItem('name')}!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a style={{cursor: "pointer"}} onClick={logout} className='navlink_a'>Logout</a>
@@ -98,6 +102,7 @@ function App(){
                             <Route path='/dearest/wheel' element={<Wheel/>}/>
                             <Route path='/dearest/timeline' element={<Timeline/>}/>
                             <Route path='/dearest/news' element={<News/>}/>
+                            <Route path='/dearest/weather' element={<MapOverlay/>} />
                         </Routes>
                     </div>
                 {/* </DndProvider> */}

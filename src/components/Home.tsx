@@ -13,9 +13,16 @@ import imageEight from '../resources/image/20231023_cookies.jpg'
 import image9 from '../resources/image/20231029_hotspring.jpg'
 import image10 from '../resources/image/20231027_cycling.jpg'
 import image11 from '../resources/image/20231022_TWG.jpg'
+import image12 from '../resources/image/20231105_adcwitholivia.jpg'
 
 function Home(){
   const contentList: any[]= [
+    {
+      header: 'ABC Cooking with Olivia',
+      date: '05 November 2023',
+      body: 'Dearest went baking with Olivia, cake was good, I wonder what Olivia thinks of me?',
+      image: image12
+    },
     {
       header: 'Sembawang Hotspring cycling adventure',
       date: '29 October 2023',
