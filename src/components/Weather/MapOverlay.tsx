@@ -196,7 +196,7 @@ function MapOverlay() {
 
   return(
     <>
-      <div id="map" style={{ width: '100%', height: '800px' }} />
+      <div id="map" style={{ width: '100%', height: '1200px' }} />
       <button onClick={swapView} style={{padding: '1rem', margin: '1rem'}}>
         {toggleView? (
           'Realtime Rainfall'
