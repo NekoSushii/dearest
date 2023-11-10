@@ -1,6 +1,4 @@
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
-// import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import Home from './components/Home';
 import Calendar from './components/Calendar';
@@ -10,6 +8,7 @@ import Wheel from './components/SpinningWheel'
 import Timeline from './components/news/Timeline'
 import News from './components/news/News'
 import MapOverlay from './components/Weather/MapOverlay';
+import SearchMapOverlay from './components/Maps/SearchMapOverlay'
 import './style/App.css'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -31,6 +30,9 @@ function App(){
                     </li> */}
                     <li className='navitem_float_left'>
                         <Link to={'/dearest/weather'} className='navlink'>Weather</Link>
+                    </li>
+                    <li className='navitem_float_left'>
+                        <Link to={'/dearest/map'} className='navlink'>Map</Link>
                     </li>
                     <li className='navitem_float_right'>Welcome {sessionStorage.getItem('name')}!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a style={{cursor: "pointer"}} onClick={logout} className='navlink_a'>Logout</a>
@@ -103,6 +105,7 @@ function App(){
                             <Route path='/dearest/timeline' element={<Timeline/>}/>
                             <Route path='/dearest/news' element={<News/>}/>
                             <Route path='/dearest/weather' element={<MapOverlay/>} />
+                            <Route path='/dearest/map' element={<SearchMapOverlay/>} />
                         </Routes>
                     </div>
                 {/* </DndProvider> */}

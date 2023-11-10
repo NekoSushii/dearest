@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import SearchMap from '../Maps/SearchMap'
 
 import sunny from '../../resources/image/sunny.png'
 import cloudy from '../../resources/image/cloudy.png'
@@ -82,13 +83,13 @@ function MapOverlay() {
       window.initMap = async () => {
           try{
   
+            //weather feature
               const mapOptions: google.maps.MapOptions = {
                   center: { lat: 1.3521, lng: 103.8198 }, //starting position
                   zoom: 10,
                 };
           
                 const map = new google.maps.Map(document.getElementById('map') as HTMLElement, mapOptions);
-
 
                 if(toggleView === true){
 
@@ -161,22 +162,52 @@ function MapOverlay() {
                     }
                   );
                 }
-                  // const contentString =
-                  //   '<div>' +
-                  //   '<h1>' + rainData.metadata.stations[i].name + '</h1>' + 
-                  //   '<h2> Rainfall precipitation (mm): ' + rainData.items[0].readings[i].value + '</h2>' +
-                  //   '</div>'
-  
-                  // const infowindow = new google.maps.InfoWindow({
-                  //   content: contentString
-                  // });
-            
-                  // marker.addListener('click', () => {
-                  //   infowindow.open(map, marker);
-                  // });
                 }
                 
-                
+                //search bar
+                const input = document.getElementById('pac-input') as HTMLInputElement;
+                const searchBox = new google.maps.places.SearchBox(input);
+                map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+                map.addListener('bounds_changed', function () {
+                    searchBox.setBounds(map.getBounds() as google.maps.LatLngBounds);
+                });
+
+                let markers: google.maps.Marker[] = [];
+                searchBox.addListener('places_changed', function () {
+                    const places = searchBox.getPlaces();
+
+                    if (places.length === 0) {
+                        return;
+                    }
+
+                    markers.forEach(function (marker) {
+                        marker.setMap(null);
+                    });
+                    markers = [];
+
+                    const bounds = new google.maps.LatLngBounds();
+                    places.forEach(function (place: { geometry: { location: any; viewport: any; }; name: any; }) {
+                        if (!place.geometry) {
+                            console.log("Returned place contains no geometry");
+                            return;
+                        }
+
+                        markers.push(new google.maps.Marker({
+                            map: map,
+                            title: place.name,
+                            position: place.geometry.location
+                        }));
+
+                        if (place.geometry.viewport) {
+                            bounds.union(place.geometry.viewport);
+                        } else {
+                            bounds.extend(place.geometry.location);
+                        }
+                    });
+                    map.fitBounds(bounds);
+                });
+
           }
   
           catch (error){
@@ -194,9 +225,11 @@ function MapOverlay() {
     }
   }
 
+
+  
   return(
     <>
-      <div id="map" style={{ width: '100%', height: '1200px' }} />
+      <div id="map" style={{ width: '100%', height: '500px' }} />
       <button onClick={swapView} style={{padding: '1rem', margin: '1rem'}}>
         {toggleView? (
           'Realtime Rainfall'
