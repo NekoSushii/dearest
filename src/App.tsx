@@ -63,9 +63,9 @@ function App(){
             <li className='navitem_float_left'>
                 <Link to={'/dearest'} className='navlink'>Home</Link>
             </li>
-            {/* <li className='navitem_float_left'>
+            <li className='navitem_float_left'>
                 <Link to={'/dearest/news'} className='navlink'>News</Link>
-            </li> */}
+            </li>
             {/* <li className='navitem_float_left'>
                 <Link to={'/dearest/timeline'} className='navlink'>Timeline</Link>
             </li> */}
