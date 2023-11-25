@@ -14,10 +14,24 @@ import image9 from '../resources/image/20231029_hotspring.jpg'
 import image10 from '../resources/image/20231027_cycling.jpg'
 import image11 from '../resources/image/20231022_TWG.jpg'
 import image12 from '../resources/image/20231105_adcwitholivia.jpg'
+import image13 from '../resources/image/20231118_sweetpotato.jpg'
+import image14 from '../resources/image/25112023_Sakepairing.jpg'
 
 
 function Home(){
   const contentList: any[]= [
+    {
+      header: 'Sake pairing at ABC cooking studio',
+      date: '25 November 2023',
+      body: 'Sake good, food good, good good',
+      image: image14
+    },
+    {
+      header: 'Strange place, even stranger food',
+      date: '20 November 2023',
+      body: 'Went to pick up Standard Chartered Ironman volunteer uniform at a place where birds dont lay egg. Had authentic chinese lunch at an authentic chinese eatery, hopefully dearest is not too traumatised by the food cleanlinest, taste good tho. Had some strange tasting papaya milkshake and mocha, tasting like sweet potato milkshake and vietnamese coffee',
+      image: image13
+    },
     {
       header: 'ABC Cooking with Olivia',
       date: '05 November 2023',
