@@ -35,7 +35,7 @@ export default function News() {
         setArticles(response.data.articles)
         setIsLoading(false)
       })
-      .catch(error => {
+      .catch((error: any) => {
         console.error(error)
     });
   }, []);

@@ -18,7 +18,6 @@ function App(){
     function NavigationBar() {
         const CheckLogin = () => {
             if(sessionStorage.getItem('name') != null){
-                // const customId = 'lol'
                 
               return(
                 <div>

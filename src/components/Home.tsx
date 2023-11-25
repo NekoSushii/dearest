@@ -15,6 +15,7 @@ import image10 from '../resources/image/20231027_cycling.jpg'
 import image11 from '../resources/image/20231022_TWG.jpg'
 import image12 from '../resources/image/20231105_adcwitholivia.jpg'
 
+
 function Home(){
   const contentList: any[]= [
     {
