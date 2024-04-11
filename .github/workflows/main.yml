@@ -1,0 +1,27 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Set this to your default branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+
+    # Add steps here to build your project, for example, for Jekyll:
+    # - name: Build and test
+    #   run: |
+    #     bundle install
+    #     bundle exec jekyll build
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@4.1.4
+      with:
+        branch: gh-pages  # The branch the action should deploy to.
+        folder: .         # The folder the action should deploy.
+        # If your build step generates output, set `folder` to the directory where the output is located, e.g., `build` or `public`
