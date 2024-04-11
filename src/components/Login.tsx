@@ -87,7 +87,7 @@ function Login(){
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">Password UwU</label>
                         <Field name="password" type="password" className="form-control" />
                         <ErrorMessage
                         name="password"
