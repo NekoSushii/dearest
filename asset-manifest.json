@@ -1,12 +1,14 @@
 {
   "files": {
-    "main.css": "/dearest/static/css/main.91f14f04.css",
-    "main.js": "/dearest/static/js/main.5262eea6.js",
-    "static/js/787.edd59a96.chunk.js": "/dearest/static/js/787.edd59a96.chunk.js",
+    "main.css": "/dearest/static/css/main.f5f77224.css",
+    "main.js": "/dearest/static/js/main.e42a30c2.js",
+    "static/js/453.68693753.chunk.js": "/dearest/static/js/453.68693753.chunk.js",
     "static/media/20231022_TWG.jpg": "/dearest/static/media/20231022_TWG.e8428db2eddd265bf63b.jpg",
     "static/media/20231105_adcwitholivia.jpg": "/dearest/static/media/20231105_adcwitholivia.64625d9699773a6a53c6.jpg",
     "static/media/20230922_dinner.jpg": "/dearest/static/media/20230922_dinner.dffde543540d2f4337f0.jpg",
     "static/media/20231027_cycling.jpg": "/dearest/static/media/20231027_cycling.84fbf186d1fe90181d4d.jpg",
+    "static/media/25112023_Sakepairing.jpg": "/dearest/static/media/25112023_Sakepairing.bd094d7206361cf13217.jpg",
+    "static/media/20231118_sweetpotato.jpg": "/dearest/static/media/20231118_sweetpotato.db4e9472bb8da5e582d1.jpg",
     "static/media/WeiLing_Birthday_150923.jpg": "/dearest/static/media/WeiLing_Birthday_150923.1e518aaeb4d7ef3a824f.jpg",
     "static/media/20231008_nox.jpg": "/dearest/static/media/20231008_nox.a95cd486e8628ecbcc0b.jpg",
     "static/media/20231007_CWS_dinner.jpg": "/dearest/static/media/20231007_CWS_dinner.872c0071c005a5f352ac.jpg",
@@ -17,12 +19,12 @@
     "static/media/bichon.png": "/dearest/static/media/bichon.a7a67741ccb09da5997c.png",
     "static/media/20231023_cookies.jpg": "/dearest/static/media/20231023_cookies.c7bac6210e644512a9fd.jpg",
     "index.html": "/dearest/index.html",
-    "main.91f14f04.css.map": "/dearest/static/css/main.91f14f04.css.map",
-    "main.5262eea6.js.map": "/dearest/static/js/main.5262eea6.js.map",
-    "787.edd59a96.chunk.js.map": "/dearest/static/js/787.edd59a96.chunk.js.map"
+    "main.f5f77224.css.map": "/dearest/static/css/main.f5f77224.css.map",
+    "main.e42a30c2.js.map": "/dearest/static/js/main.e42a30c2.js.map",
+    "453.68693753.chunk.js.map": "/dearest/static/js/453.68693753.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.91f14f04.css",
-    "static/js/main.5262eea6.js"
+    "static/css/main.f5f77224.css",
+    "static/js/main.e42a30c2.js"
   ]
 }
