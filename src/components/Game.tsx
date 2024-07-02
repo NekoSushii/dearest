@@ -23,7 +23,6 @@ function Game(){
     const [OwO, setOwO] = useState(false)
 
     useEffect(() => {
-
         async function fetchData(){
           await getDocs(collection(db, 'game')).then((response: any) => {
     
@@ -37,10 +36,8 @@ function Game(){
             }
             setIsLoading(false)
         });}
-    
+
         fetchData()
-        
-        
       },[OwO])
 
 
@@ -84,7 +81,6 @@ function Game(){
           }
 
           setOwO(true)
-
         }
       };
 
@@ -129,7 +125,6 @@ function Game(){
           }
         }
       }
-
 
       const content = () => {
         if(isLoading === false){
@@ -194,7 +189,6 @@ function Game(){
     return(
       <>
       {content()}
-        
       </>
     )
 }
